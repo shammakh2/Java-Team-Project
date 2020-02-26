@@ -1,5 +1,9 @@
 package csc1035.project3.lookup;
 
+import csc1035.project3.HibernateUtil;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -39,6 +43,25 @@ public class stockLookup {
         System.out.println("Searching for ID: " + search_item_id);
 
         // Code here to search DB once its made
+
+        //Read
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+            List cars = session.createQuery("FROM CAR").list();
+            for (Iterator<Item> iterator = cars.iterator(); iterator.hasNext();){
+                Item item = iterator.next();
+                if(item.getID() == search_item_id){
+                    data.add(item);
+                }
+            }
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            if (session!=null) session.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
 
         // Code here to run output with the list
         output(data);
