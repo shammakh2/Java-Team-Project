@@ -13,12 +13,6 @@ import java.util.Scanner;
 public class stockLookup {
     public static void main(String[] args){
         System.out.println("Beginning Lookup");
-        /*Item test_item = new Item(1, "Gold Ring", 4 );
-        List<Item> test_list = new ArrayList<>();
-        test_list.add(test_item);
-        test_list.add(test_item);
-        output(test_list);*/
-        //get_data_id();
         get_data_name();
     }
 
