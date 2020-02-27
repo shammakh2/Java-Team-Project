@@ -13,16 +13,25 @@ import java.util.Scanner;
 public class stockLookup {
     public static void main(String[] args){
         System.out.println("Beginning Lookup");
-        get_data_name();
+
+        Scanner type_scanner = new Scanner(System.in);
+        System.out.print("Enter search type\n>>>  ");
+        String choice = type_scanner.nextLine();
+        if(choice.toLowerCase().equals("id")){
+            get_data_id();
+        } else if (choice.toLowerCase().equals("name")){
+            get_data_name();
+        }
     }
 
     public static void get_data_name(){
         List<Table_Initializer> data = new ArrayList<>();
 
-        Scanner id_scanner = new Scanner(System.in);
+        Scanner name_scanner = new Scanner(System.in);
         System.out.print("Enter item name \n>>>  ");
-        String search_item_name = id_scanner.nextLine();
+        String search_item_name = name_scanner.nextLine();
         System.out.println("Searching for Item: " + search_item_name);
+        search_item_name = search_item_name.toLowerCase();
 
         // Code here to search DB once its made
 
@@ -34,7 +43,8 @@ public class stockLookup {
             for (Iterator<Table_Initializer> iterator = stock.iterator(); iterator.hasNext();){
                 Table_Initializer item = iterator.next();
                 if(item.getName() instanceof String) {
-                    if (item.getName().equals(search_item_name)) {
+                    if (item.getName().toLowerCase().equals(search_item_name) || item.getName().toLowerCase().
+                            contains(search_item_name)) {
                         data.add(item);
                     }
                 } else {
