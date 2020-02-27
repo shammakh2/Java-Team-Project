@@ -14,7 +14,7 @@
         <property name="format_sql">true</property>
         <property name="hbm2ddl.auto">update </property>
 
-        <mapping class="csc1035.project3.insert.Shop_Stock" /> <!--- Mapping to csc1035.project3.insert.Shop_Stock table -->
+        <mapping class="csc1035.project3.insert.Table_Initializer" /> <!--- Mapping to csc1035.project3.insert.Shop_Stock table -->
 
     </session-factory>
 </hibernate-configuration>
