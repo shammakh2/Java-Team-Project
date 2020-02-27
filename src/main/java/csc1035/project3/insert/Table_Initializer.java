@@ -3,7 +3,7 @@ package csc1035.project3.insert;
 import javax.persistence.*;
 
 @Entity(name = "Stock") //Table name
-public class Shop_Stock {
+public class Table_Initializer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +16,7 @@ public class Shop_Stock {
     @Column(name = "product_category")
     private String category;
 
-    public Shop_Stock() {
+    public Table_Initializer() {
     }
 
     @Column(name = "product_perishable")
@@ -32,7 +32,7 @@ public class Shop_Stock {
     private int sell_price;
 
 
-    public Shop_Stock(int id, String name, String category, Boolean perishable, int cost, int stock, int sell_price) {
+    public Table_Initializer(int id, String name, String category, Boolean perishable, int cost, int stock, int sell_price) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -42,7 +42,7 @@ public class Shop_Stock {
         this.sell_price = sell_price;
     }
 
-    public Shop_Stock(int id) {
+    public Table_Initializer(int id) {
         this.id = id;
     }
     public int getId() {
