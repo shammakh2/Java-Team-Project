@@ -24,18 +24,25 @@ public class stockLookup {
         }
     }
 
+    /**
+     * Searches the Stock table for item names that contain or match a search term.
+     */
     public static void get_data_name(){
+        /**
+         * List containing results to be outputted later.
+         */
         List<Table_Initializer> data = new ArrayList<>();
 
         Scanner name_scanner = new Scanner(System.in);
         System.out.print("Enter item name \n>>>  ");
+        /**
+         * User entered search term
+         */
         String search_item_name = name_scanner.nextLine();
         System.out.println("Searching for Item: " + search_item_name);
         search_item_name = search_item_name.toLowerCase();
 
-        // Code here to search DB once its made
-
-        //Read
+        // Read
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -48,6 +55,9 @@ public class stockLookup {
                         data.add(item);
                     }
                 } else {
+                    /**
+                     * Warning for if item name is null.
+                     */
                     System.out.println("Warning: item ID " + item.getId() + " has no name");
                 }
             }
@@ -59,22 +69,28 @@ public class stockLookup {
             session.close();
         }
 
-        // Code here to run output with the list
+        // Output
         output(data);
     }
 
-
+    /**
+     * Searches the Stock table for item ids that match a search term.
+     */
     public static void get_data_id(){
+        /**
+         * List containing results to be outputted later.
+         */
         List<Table_Initializer> data = new ArrayList<>();
 
         Scanner id_scanner = new Scanner(System.in);
         System.out.print("Enter item ID \n>>>  ");
+        /**
+         * User entered search term
+         */
         int search_item_id = Integer.valueOf(id_scanner.nextLine());
         System.out.println("Searching for ID: " + search_item_id);
 
-        // Code here to search DB once its made
-
-        //Read
+        // Read
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -93,15 +109,17 @@ public class stockLookup {
             session.close();
         }
 
-        // Code here to run output with the list
+        // Output
         output(data);
     }
-
+    /**
+     * Outputs the provided data in an ascii table
+     */
     public static void output(List<Table_Initializer> data){
-
-        // Function outputs a table containing the results of the database query.
-
-        String align = "| %-15s | %-10s | %-10s |%n";  // Formatting key for table
+        /**
+         * Formatting key for table
+         */
+        String align = "| %-15s | %-10s | %-10s |%n";
 
         System.out.format("+-----------------+------------+------------+%n");
         System.out.format("| Item ID         | Item Name  |  Quantity  |%n");
