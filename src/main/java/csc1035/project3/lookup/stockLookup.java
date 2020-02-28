@@ -18,14 +18,13 @@ public class stockLookup {
         System.out.print("Enter search type\n>>>  ");
         String choice = type_scanner.nextLine();
         if(choice.toLowerCase().equals("id")){
-            //get_data_id();
             get_data("id");
         } else if (choice.toLowerCase().equals("name")){
-            //get_data_name();
             get_data("name");
         } else if (choice.toLowerCase().equals("category")){
-            //get_data_category();
             get_data("category");
+        } else if (choice.toLowerCase().equals("quantity") || choice.toLowerCase().equals("stock")){
+            get_data("quantity");
         } else {
             System.out.println("Invalid category");
         }
@@ -83,6 +82,11 @@ public class stockLookup {
                       Warning for if item name is null.
                      */
                         System.out.println("Warning: item ID " + item.getId() + " has no category");
+                    }
+                } else if (type.equals("quantity")){
+                    int search_item_stock = Integer.valueOf(search_item);
+                    if(item.getStock() == search_item_stock){
+                        data.add(item);
                     }
                 }
             }
