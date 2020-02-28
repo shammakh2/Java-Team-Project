@@ -175,18 +175,18 @@ public class stockLookup {
             }
         }
 
-        String align = "| %-15s | %-"+max_length+"s | %-10s | %-10s |%n";  // Formatting key for table
+        String align = "| %-15s | %-"+max_length+"s | %-10s | %-10s | %-10s |%n";  // Formatting key for table
 
         String row_text = String.format(String.format("%%%ds", max_length + 2), " ").replace(" ", "-");
         String title_text = String.format(String.format("%%%ds", max_length - 9), " ");
 
-        System.out.format("+-----------------+"+row_text+"+------------+------------+%n");
-        System.out.format("| Item ID         | Item Name"+title_text+" |  Quantity  | Category   |%n");
-        System.out.format("+-----------------+"+row_text+"+------------+------------+%n");
+        System.out.format("+-----------------+"+row_text+"+------------+------------+------------+%n");
+        System.out.format("| Item ID         | Item Name"+title_text+" |  Quantity  | Category   | Cost       |%n");
+        System.out.format("+-----------------+"+row_text+"+------------+------------+------------+%n");
         for (Table_Initializer item : data) {
-            System.out.format(align, item.getId(), item.getName(), item.getStock(), item.getCategory());  // Prints out database row
+            System.out.format(align, item.getId(), item.getName(), item.getStock(), item.getCategory(), item.getCost());  // Prints out database row
         }
-        System.out.format("+-----------------+"+row_text+"+------------+------------+%n");
+        System.out.format("+-----------------+"+row_text+"+------------+------------+------------+%n");
     }
 
 }
