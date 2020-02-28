@@ -40,7 +40,10 @@ public class ui {
 
     }
 
-    public static void help(){
+    /**
+     *  Outputs a help message for the ui
+     */
+    private static void help(){
         for(String option : options){
             System.out.println(option);
         }
