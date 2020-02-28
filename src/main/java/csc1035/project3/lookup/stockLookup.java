@@ -5,32 +5,20 @@ import csc1035.project3.insert.Table_Initializer;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class stockLookup {
     public static void main(String[] args){
+        ArrayList<String> valid = new ArrayList<>(Arrays.asList("id", "name", "category", "quantity", "cost",
+                "sell price", "perishable"));
+
         System.out.println("Beginning Lookup");
 
         Scanner type_scanner = new Scanner(System.in);
         System.out.print("Enter search type\n>>>  ");
         String choice = type_scanner.nextLine();
-        if(choice.toLowerCase().equals("id")){
-            get_data("id");
-        } else if (choice.toLowerCase().equals("name")){
-            get_data("name");
-        } else if (choice.toLowerCase().equals("category")){
-            get_data("category");
-        } else if (choice.toLowerCase().equals("quantity") || choice.toLowerCase().equals("stock")){
-            get_data("quantity");
-        } else if (choice.toLowerCase().equals("cost")){
-            get_data("cost");
-        }  else if (choice.toLowerCase().equals("sell price")){
-            get_data("sell price");
-        } else if (choice.toLowerCase().equals("perishable")){
-            get_data("perishable");
+        if(valid.contains(choice)){
+            get_data(choice);
         } else {
             System.out.println("Invalid category");
         }
