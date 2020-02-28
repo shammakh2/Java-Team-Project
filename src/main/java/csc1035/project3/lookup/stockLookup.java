@@ -28,15 +28,15 @@ public class stockLookup {
      * Searches the Stock table for item names that contain or match a search term.
      */
     public static void get_data_name(){
-        /**
-         * List containing results to be outputted later.
+        /*
+          List containing results to be outputted later.
          */
         List<Table_Initializer> data = new ArrayList<>();
 
         Scanner name_scanner = new Scanner(System.in);
         System.out.print("Enter item name \n>>>  ");
-        /**
-         * User entered search term
+        /*
+          User entered search term
          */
         String search_item_name = name_scanner.nextLine();
         System.out.println("Searching for Item: " + search_item_name);
@@ -49,14 +49,14 @@ public class stockLookup {
             List stock = session.createQuery("FROM Stock").list();
             for (Iterator<Table_Initializer> iterator = stock.iterator(); iterator.hasNext();){
                 Table_Initializer item = iterator.next();
-                if(item.getName() instanceof String) {
+                if(item.getName() != null) {
                     if (item.getName().toLowerCase().equals(search_item_name) || item.getName().toLowerCase().
                             contains(search_item_name)) {
                         data.add(item);
                     }
                 } else {
-                    /**
-                     * Warning for if item name is null.
+                    /*
+                      Warning for if item name is null.
                      */
                     System.out.println("Warning: item ID " + item.getId() + " has no name");
                 }
@@ -77,15 +77,15 @@ public class stockLookup {
      * Searches the Stock table for item ids that match a search term.
      */
     public static void get_data_id(){
-        /**
-         * List containing results to be outputted later.
+        /*
+          List containing results to be outputted later.
          */
         List<Table_Initializer> data = new ArrayList<>();
 
         Scanner id_scanner = new Scanner(System.in);
         System.out.print("Enter item ID \n>>>  ");
-        /**
-         * User entered search term
+        /*
+          User entered search term
          */
         int search_item_id = Integer.valueOf(id_scanner.nextLine());
         System.out.println("Searching for ID: " + search_item_id);
@@ -115,11 +115,9 @@ public class stockLookup {
     /**
      * Outputs the provided data in an ascii table
      */
-    public static void output(List<Table_Initializer> data){
-        /**
-         * Formatting key for table
-         */
-        String align = "| %-15s | %-10s | %-10s |%n";
+    private static void output(List<Table_Initializer> data){
+
+        String align = "| %-15s | %-10s | %-10s |%n";  // Formatting key for table
 
         System.out.format("+-----------------+------------+------------+%n");
         System.out.format("| Item ID         | Item Name  |  Quantity  |%n");
