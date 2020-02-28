@@ -21,6 +21,8 @@ public class stockLookup {
             get_data_id();
         } else if (choice.toLowerCase().equals("name")){
             get_data_name();
+        } else if (choice.toLowerCase().equals("category")){
+            get_data_category();
         }
     }
 
@@ -59,6 +61,55 @@ public class stockLookup {
                       Warning for if item name is null.
                      */
                     System.out.println("Warning: item ID " + item.getId() + " has no name");
+                }
+            }
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            if (session!=null) session.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        // Output
+        output(data);
+    }
+
+    /**
+     * Searches the Stock table for item categories that contain or match a search term.
+     */
+    public static void get_data_category(){
+        /*
+          List containing results to be outputted later.
+         */
+        List<Table_Initializer> data = new ArrayList<>();
+
+        Scanner cat_scanner = new Scanner(System.in);
+        System.out.print("Enter category \n>>>  ");
+        /*
+          User entered search term
+         */
+        String search_item_cat = cat_scanner.nextLine();
+        System.out.println("Searching for Item: " + search_item_cat);
+        search_item_cat = search_item_cat.toLowerCase();
+
+        // Read
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+            List stock = session.createQuery("FROM Stock").list();
+            for (Iterator<Table_Initializer> iterator = stock.iterator(); iterator.hasNext();){
+                Table_Initializer item = iterator.next();
+                if(item.getName() != null) {
+                    if (item.getCategory().toLowerCase().equals(search_item_cat) || item.getCategory().toLowerCase().
+                            contains(search_item_cat)) {
+                        data.add(item);
+                    }
+                } else {
+                    /*
+                      Warning for if item name is null.
+                     */
+                    System.out.println("Warning: item ID " + item.getId() + " has no category");
                 }
             }
             session.getTransaction().commit();
@@ -117,15 +168,25 @@ public class stockLookup {
      */
     private static void output(List<Table_Initializer> data){
 
-        String align = "| %-15s | %-10s | %-10s |%n";  // Formatting key for table
+        int max_length = 10;
+        for(Table_Initializer item: data){
+            if(item.getName().length() > max_length){
+                max_length = item.getName().length();
+            }
+        }
 
-        System.out.format("+-----------------+------------+------------+%n");
-        System.out.format("| Item ID         | Item Name  |  Quantity  |%n");
-        System.out.format("+-----------------+------------+------------+%n");
+        String align = "| %-15s | %-"+max_length+"s | %-10s |%n";  // Formatting key for table
+
+        String row_text = String.format(String.format("%%%ds", max_length + 2), " ").replace(" ", "-");
+        String title_text = String.format(String.format("%%%ds", max_length - 9), " ");
+
+        System.out.format("+-----------------+"+row_text+"+------------+%n");
+        System.out.format("| Item ID         | Item Name"+title_text+" |  Quantity  |%n");
+        System.out.format("+-----------------+"+row_text+"+------------+%n");
         for (Table_Initializer item : data) {
             System.out.format(align, item.getId(), item.getName(), item.getStock());  // Prints out database row
         }
-        System.out.format("+-----------------+------------+------------+%n");
+        System.out.format("+-----------------+"+row_text+"+------------+%n");
     }
 
 }
