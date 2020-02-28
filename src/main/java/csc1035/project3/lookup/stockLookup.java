@@ -25,6 +25,10 @@ public class stockLookup {
             get_data("category");
         } else if (choice.toLowerCase().equals("quantity") || choice.toLowerCase().equals("stock")){
             get_data("quantity");
+        } else if (choice.toLowerCase().equals("cost")){
+            get_data("cost");
+        } else if (choice.toLowerCase().equals("sell price")){
+            get_data("sell price");
         } else {
             System.out.println("Invalid category");
         }
@@ -86,6 +90,16 @@ public class stockLookup {
                 } else if (type.equals("quantity")){
                     int search_item_stock = Integer.valueOf(search_item);
                     if(item.getStock() == search_item_stock){
+                        data.add(item);
+                    }
+                } else if (type.equals("cost")){
+                    int search_item_cost = Integer.valueOf(search_item);
+                    if(item.getCost() == search_item_cost){
+                        data.add(item);
+                    }
+                } else if (type.equals("sell price")){
+                    int search_item_sell = Integer.valueOf(search_item);
+                    if(item.getSell_price() == search_item_sell){
                         data.add(item);
                     }
                 }
