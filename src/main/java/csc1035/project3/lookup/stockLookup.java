@@ -27,8 +27,10 @@ public class stockLookup {
             get_data("quantity");
         } else if (choice.toLowerCase().equals("cost")){
             get_data("cost");
-        } else if (choice.toLowerCase().equals("sell price")){
+        }  else if (choice.toLowerCase().equals("sell price")){
             get_data("sell price");
+        } else if (choice.toLowerCase().equals("perishable")){
+            get_data("perishable");
         } else {
             System.out.println("Invalid category");
         }
@@ -102,6 +104,10 @@ public class stockLookup {
                     if(item.getSell_price() == search_item_sell){
                         data.add(item);
                     }
+                } else if (type.equals("perishable")){
+                    if(Boolean.toString(item.getPerishable()).equals(search_item)){
+                        data.add(item);
+                    }
                 }
             }
             session.getTransaction().commit();
@@ -128,19 +134,19 @@ public class stockLookup {
             }
         }
 
-        String align = "| %-15s | %-"+max_length+"s | %-10s | %-10s | %-10s | %-10s |%n";  // Formatting key for table
+        String align = "| %-15s | %-"+max_length+"s | %-10s | %-10s | %-10s | %-10s | %-10s |%n";  // Formatting key for table
 
         String row_text = String.format(String.format("%%%ds", max_length + 2), " ").replace(" ", "-");
         String title_text = String.format(String.format("%%%ds", max_length - 9), " ");
 
-        System.out.format("+-----------------+"+row_text+"+------------+------------+------------+------------+%n");
-        System.out.format("| Item ID         | Item Name"+title_text+" |  Quantity  | Category   | Cost       | Sell Price |%n");
-        System.out.format("+-----------------+"+row_text+"+------------+------------+------------+------------+%n");
+        System.out.format("+-----------------+"+row_text+"+------------+------------+------------+------------+------------+%n");
+        System.out.format("| Item ID         | Item Name"+title_text+" |  Quantity  | Category   | Cost       | Sell Price | Perishable |%n");
+        System.out.format("+-----------------+"+row_text+"+------------+------------+------------+------------+------------+%n");
         for (Table_Initializer item : data) {
-            System.out.format(align, item.getId(), item.getName(), item.getStock(), item.getCategory(), item.getCost(), item.getSell_price());
+            System.out.format(align, item.getId(), item.getName(), item.getStock(), item.getCategory(), item.getCost(), item.getSell_price(), item.getPerishable());
             // Prints out database row
         }
-        System.out.format("+-----------------+"+row_text+"+------------+------------+------------+------------+%n");
+        System.out.format("+-----------------+"+row_text+"+------------+------------+------------+------------+------------+%n");
     }
 
 }
