@@ -5,6 +5,9 @@ import javax.persistence.*;
 @Entity(name = "Stock") //Table name
 public class Table_Initializer {
 
+    public Table_Initializer() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_ID", updatable = false, nullable = false)
@@ -16,23 +19,20 @@ public class Table_Initializer {
     @Column(name = "product_category")
     private String category;
 
-    public Table_Initializer() {
-    }
-
     @Column(name = "product_perishable")
     private Boolean perishable;
 
     @Column(name = "product_cost")
-    private int cost;
+    private float cost;
 
     @Column(name = "product_stock")
     private int stock;
 
     @Column(name = "product_sell_price")
-    private int sell_price;
+    private float sell_price;
 
 
-    public Table_Initializer(int id, String name, String category, Boolean perishable, int cost, int stock, int sell_price) {
+    public Table_Initializer(int id, String name, String category, Boolean perishable, float cost, int stock, float sell_price) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -47,6 +47,10 @@ public class Table_Initializer {
     }
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -73,10 +77,11 @@ public class Table_Initializer {
         this.perishable = perishable;
     }
 
-    public int getCost() {
+    public float getCost() {
         return cost;
     }
-    public void setCost(int cost) {
+
+    public void setCost(float cost) {
         this.cost = cost;
     }
 
@@ -87,10 +92,10 @@ public class Table_Initializer {
         this.stock = stock;
     }
 
-    public int getSell_price() {
+    public float getSell_price() {
         return sell_price;
     }
-    public void setSell_price(int sell_price) {
+    public void setSell_price(float sell_price) {
         this.sell_price = sell_price;
     }
 }
