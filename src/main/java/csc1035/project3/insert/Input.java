@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 
 public class Input {
-    static Table_Initializer s = new Table_Initializer();
 
     public static void CSV() {
         try {
