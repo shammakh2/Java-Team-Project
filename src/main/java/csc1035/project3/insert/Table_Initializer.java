@@ -9,7 +9,6 @@ public class Table_Initializer {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_ID", updatable = false, nullable = false)
     private int id;
 

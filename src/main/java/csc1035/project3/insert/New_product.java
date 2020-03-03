@@ -10,6 +10,7 @@ public class New_product {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Table_Initializer table_initializer = new Table_Initializer();
+            table_initializer.setId(Table_Initializer.getId());
             table_initializer.setName(Table_Initializer.getName());
             table_initializer.setCategory(Table_Initializer.getCategory());
             table_initializer.setPerishable(Table_Initializer.getPerishable());

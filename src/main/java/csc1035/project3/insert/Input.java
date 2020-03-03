@@ -45,11 +45,15 @@ public class Input {
             info = scanner.nextLine();
             String[] arrInfo = info.split(",");
             int id = Integer.parseInt(arrInfo[0]);
-            boolean b = Boolean.parseBoolean(arrInfo[2]);
+            boolean b = Boolean.parseBoolean(arrInfo[3]);
             float cost = Float.parseFloat(arrInfo[4]);
             int stock = Integer.parseInt(arrInfo[5]);
             float sell_price = Float.parseFloat(arrInfo[6]);
+            System.out.println(id+""+b+""+cost+""+stock+""+sell_price);
+
+
             Table_Initializer userEntry = new Table_Initializer(id, arrInfo[1], arrInfo[2], b, cost, stock, sell_price);
+            userEntry.setId(id);
             userEntry.setName(arrInfo[1]);
             userEntry.setCategory(arrInfo[2]);
             userEntry.setPerishable(b);
