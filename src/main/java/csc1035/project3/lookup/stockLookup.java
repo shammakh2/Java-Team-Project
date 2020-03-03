@@ -9,9 +9,6 @@ import java.util.*;
 
 public class stockLookup {
     public static void main(String[] args){
-        ArrayList<String> valid = new ArrayList<>(Arrays.asList("id", "name", "category", "quantity", "cost",
-                "sell price", "perishable"));
-
         HashMap<String, String> values = new HashMap<String, String>();
         values.put("id", "WHERE product_ID = ");
         values.put("name", "WHERE product_name LIKE ");
