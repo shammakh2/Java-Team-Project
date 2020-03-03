@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class ui {
-    public static ArrayList<String> options = new ArrayList<>(Arrays.asList("lookup", "exit"));
+    public static ArrayList<String> options = new ArrayList<>(Arrays.asList("lookup", "insert","exit"));
     public static void main(String[] args){
         boolean running = true;
         System.out.println("Welcome");
@@ -31,6 +31,9 @@ public class ui {
             String[] arguments = new String[]{"123"};  // use if running a main method.
             if (choice.equals("lookup")) {
                 csc1035.project3.lookup.stockLookup.main(arguments);
+            }
+            if (choice.equals("insert")) {
+                csc1035.project3.insert.Input.user();
             }
             if (choice.equals("exit")) {
                 running = false;

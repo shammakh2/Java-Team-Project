@@ -77,7 +77,7 @@ public class stockLookup {
                      */
                         System.out.println("Warning: item ID " + item.getId() + " has no category");
                     }
-                } else if (type.equals("quantity")){
+                } else if (type.equals("quantity") || type.equals("stock")){
                     int search_item_stock = Integer.valueOf(search_item);
                     if(item.getStock() == search_item_stock){
                         data.add(item);
