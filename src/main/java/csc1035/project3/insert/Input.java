@@ -20,7 +20,6 @@ public class Input {
                 float cost = Float.parseFloat(newArray[4]);
                 int stock = Integer.parseInt(newArray[5]);
                 float sell_price = Float.parseFloat(newArray[6]);
-
                 Table_Initializer entry = new Table_Initializer(id, newArray[1], newArray[2], b, cost, stock, sell_price);
                 entry.setId(id);
                 entry.setName(newArray[1]);
@@ -49,9 +48,6 @@ public class Input {
             float cost = Float.parseFloat(arrInfo[4]);
             int stock = Integer.parseInt(arrInfo[5]);
             float sell_price = Float.parseFloat(arrInfo[6]);
-            System.out.println(id+""+b+""+cost+""+stock+""+sell_price);
-
-
             Table_Initializer userEntry = new Table_Initializer(id, arrInfo[1], arrInfo[2], b, cost, stock, sell_price);
             userEntry.setId(id);
             userEntry.setName(arrInfo[1]);
