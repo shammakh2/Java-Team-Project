@@ -20,17 +20,21 @@ public class stockLookup {
 
         System.out.println("Beginning Lookup");
 
+        boolean asking = true;
         Scanner type_scanner = new Scanner(System.in);
-        System.out.print("Enter search type\n>>>  ");
-        String choice = type_scanner.nextLine();
-        if(values.keySet().contains(choice)){
-            get_data(choice, values.get(choice));
-        } else if(choice.toLowerCase().equals("help")){
-            for(String key : values.keySet()){
-                System.out.println(key);
+        while (asking){
+            System.out.print("Enter search type\n>>>  ");
+            String choice = type_scanner.nextLine();
+            if(values.keySet().contains(choice)){
+                get_data(choice, values.get(choice));
+                asking = false;
+            } else if(choice.toLowerCase().equals("help")){
+                for(String key : values.keySet()){
+                    System.out.println(key);
+                }
+            } else {
+                System.out.println("Invalid category");
             }
-        } else {
-            System.out.println("Invalid category");
         }
     }
     /**
