@@ -84,6 +84,7 @@ public class Table_Initializer {
     public int getStock() {
         return stock;
     }
+
     public void setStock(int stock) {
         this.stock = stock;
     }
@@ -91,6 +92,7 @@ public class Table_Initializer {
     public float getSell_price() {
         return sell_price;
     }
+
     public void setSell_price(float sell_price) {
         this.sell_price = sell_price;
     }
