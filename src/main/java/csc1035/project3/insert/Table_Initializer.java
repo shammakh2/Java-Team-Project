@@ -42,9 +42,6 @@ public class Table_Initializer {
         this.sell_price = sell_price;
     }
 
-    public Table_Initializer(int id) {
-        this.id = id;
-    }
     public int getId() {
         return id;
     }

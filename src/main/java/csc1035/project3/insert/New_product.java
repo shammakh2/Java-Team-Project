@@ -1,5 +1,4 @@
 package csc1035.project3.insert;
-
 import csc1035.project3.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
