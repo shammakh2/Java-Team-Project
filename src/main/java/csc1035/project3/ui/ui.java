@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class ui {
-    public static ArrayList<String> options = new ArrayList<>(Arrays.asList("lookup", "insert","exit"));
+    public static ArrayList<String> options = new ArrayList<>(Arrays.asList("lookup", "insert - unique", "insert - csv", "exit"));
     public static void main(String[] args){
         boolean running = true;
         System.out.println("Welcome");
@@ -32,8 +32,11 @@ public class ui {
             if (choice.equals("lookup")) {
                 csc1035.project3.lookup.stockLookup.main(arguments);
             }
-            if (choice.equals("insert")) {
+            if (choice.equals("insert - unique")) {
                 csc1035.project3.insert.Input.user();
+            }
+            if (choice.equals("insert - csv")) {
+                csc1035.project3.insert.Input.CSV();
             }
             if (choice.equals("exit")) {
                 running = false;
