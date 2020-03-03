@@ -30,6 +30,18 @@ public class Table_Initializer {
     @Column(name = "product_sell_price")
     private float sell_price;
 
+    @Override
+    public String toString() {
+        return "Table_Initializer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                ", perishable=" + perishable +
+                ", cost=" + cost +
+                ", stock=" + stock +
+                ", sell_price=" + sell_price +
+                '}';
+    }
 
     public Table_Initializer(int id, String name, String category, Boolean perishable, float cost, int stock, float sell_price) {
         this.id = id;

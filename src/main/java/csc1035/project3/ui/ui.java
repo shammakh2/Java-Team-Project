@@ -1,5 +1,4 @@
 package csc1035.project3.ui;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -40,6 +39,7 @@ public class ui {
             }
             if (choice.equals("exit")) {
                 running = false;
+                csc1035.project3.warning.warning_quantity.warning();
                 System.out.println("Exiting program, goodbye.");
             }
         }
