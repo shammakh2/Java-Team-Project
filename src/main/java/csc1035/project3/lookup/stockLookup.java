@@ -12,13 +12,26 @@ public class stockLookup {
         ArrayList<String> valid = new ArrayList<>(Arrays.asList("id", "name", "category", "quantity", "cost",
                 "sell price", "perishable"));
 
+        HashMap<String, String> values = new HashMap<String, String>();
+        values.put("id", "WHERE product_ID = ");
+        values.put("name", "WHERE product_name LIKE ");
+        values.put("category", "WHERE product_category LIKE ");
+        values.put("quantity", "WHERE product_stock = ");
+        values.put("cost", "WHERE product_cost = ");
+        values.put("sell price", "WHERE product_sell_price = ");
+        values.put("perishable", "Where product_perishable = ");
+
         System.out.println("Beginning Lookup");
 
         Scanner type_scanner = new Scanner(System.in);
         System.out.print("Enter search type\n>>>  ");
         String choice = type_scanner.nextLine();
-        if(valid.contains(choice)){
-            get_data(choice);
+        if(values.keySet().contains(choice)){
+            get_data(choice, values.get(choice));
+        } else if(choice.toLowerCase().equals("help")){
+            for(String key : values.keySet()){
+                System.out.println(key);
+            }
         } else {
             System.out.println("Invalid category");
         }
@@ -26,7 +39,7 @@ public class stockLookup {
     /**
      * Searches the Stock table for items.
      */
-    public static void get_data(String type){
+    public static void get_data(String type, String term){
         /*
           List containing results to be outputted later.
          */
@@ -45,58 +58,16 @@ public class stockLookup {
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
-            List stock = session.createQuery("FROM Stock").list();
+            String search_term = "";
+            if(type.equals("name") || type.equals("category")){
+                search_term = "FROM Stock " + term + "'%"+ search_item +"%'";
+            } else {
+                search_term = "FROM Stock " + term + search_item;
+            }
+            List stock = session.createQuery(search_term).list();
             for (Iterator<Table_Initializer> iterator = stock.iterator(); iterator.hasNext();){
                 Table_Initializer item = iterator.next();
-                if(type.equals("name")) {
-                    if (item.getName() != null) {
-                        if (item.getName().toLowerCase().equals(search_item) || item.getName().toLowerCase().
-                                contains(search_item)) {
-                            data.add(item);
-                        }
-                    } else {
-                        /*
-                          Warning for if item name is null.
-                         */
-                        System.out.println("Warning: item ID " + item.getId() + " has no name");
-                    }
-                } else if (type.equals("id")){
-                    int search_item_id = Integer.valueOf(search_item);
-                    if(item.getId() == search_item_id){
-                        data.add(item);
-                    }
-                } else if (type.equals("category")){
-                    if(item.getName() != null) {
-                        if (item.getCategory().toLowerCase().equals(search_item) || item.getCategory().toLowerCase().
-                                contains(search_item)) {
-                            data.add(item);
-                        }
-                    } else {
-                    /*
-                      Warning for if item name is null.
-                     */
-                        System.out.println("Warning: item ID " + item.getId() + " has no category");
-                    }
-                } else if (type.equals("quantity") || type.equals("stock")){
-                    int search_item_stock = Integer.valueOf(search_item);
-                    if(item.getStock() == search_item_stock){
-                        data.add(item);
-                    }
-                } else if (type.equals("cost")){
-                    int search_item_cost = Integer.valueOf(search_item);
-                    if(item.getCost() == search_item_cost){
-                        data.add(item);
-                    }
-                } else if (type.equals("sell price")){
-                    int search_item_sell = Integer.valueOf(search_item);
-                    if(item.getSell_price() == search_item_sell){
-                        data.add(item);
-                    }
-                } else if (type.equals("perishable")){
-                    if(Boolean.toString(item.getPerishable()).equals(search_item)){
-                        data.add(item);
-                    }
-                }
+                data.add(item);
             }
             session.getTransaction().commit();
         } catch (HibernateException e) {
