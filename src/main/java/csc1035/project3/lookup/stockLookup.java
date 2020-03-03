@@ -45,7 +45,7 @@ public class stockLookup {
           List containing results to be outputted later.
          */
         List<Table_Initializer> data = new ArrayList<>();
-
+        
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter item "+type+" \n>>>  ");
         /*
@@ -54,6 +54,14 @@ public class stockLookup {
         String search_item = scanner.nextLine();
         System.out.println("Searching for "+type+": " + search_item);
         search_item = search_item.toLowerCase();
+        if(search_item.contains("<")){
+            term = term.replace("=", "<");
+            search_item = search_item.replace("<", "");
+        }
+        if(search_item.contains(">")){
+            term = term.replace("=", ">");
+            search_item = search_item.replace(">", "");
+        }
 
         // Read
         Session session = HibernateUtil.getSessionFactory().openSession();
