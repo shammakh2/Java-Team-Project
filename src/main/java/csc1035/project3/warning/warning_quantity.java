@@ -31,6 +31,7 @@ public class warning_quantity {
             session.close();
         }
         output.output(data);
+        System.out.println("The quantity of these products are low, you should order some more.");
     }
  /*   private static void output(List<Table_Initializer> data){
 
