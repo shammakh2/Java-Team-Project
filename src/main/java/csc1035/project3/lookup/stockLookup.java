@@ -54,7 +54,14 @@ public class stockLookup {
         String search_item = scanner.nextLine();
         System.out.println("Searching for "+type+": " + search_item);
         search_item = search_item.toLowerCase();
-        if(search_item.contains("<=")){
+
+        boolean range_search = false;
+
+        if(search_item.contains("-")){
+            String[] range = search_item.split("-");
+            term = term.replace("=", "BETWEEN " + range[0] + " AND " + range[1]);
+            range_search = true;
+        } else if(search_item.contains("<=")){
             term = term.replace("=", "<=");
             search_item = search_item.replace("<=", "");
         } else if(search_item.contains(">=")){
@@ -75,6 +82,8 @@ public class stockLookup {
             String search_term = "";
             if(type.equals("name") || type.equals("category")){
                 search_term = "FROM Stock " + term + "'%"+ search_item +"%'";
+            } else if(range_search){
+                search_term = "FROM Stock " + term;
             } else {
                 search_term = "FROM Stock " + term + search_item;
             }
