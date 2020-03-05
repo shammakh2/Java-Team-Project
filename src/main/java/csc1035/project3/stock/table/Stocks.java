@@ -1,13 +1,13 @@
 package csc1035.project3.stock.table;
 
 import csc1035.project3.transactions.table.Transactions;
-
+import csc1035.project3.table.Relation;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Stock {
+public class Stocks {
 
     @Id
     private int id;
@@ -23,15 +23,15 @@ public class Stock {
     private int stock;
     @Column
     private double sell_price;
-    @ManyToMany(mappedBy = "stocks")
-    private List<Transactions> transactions = new ArrayList<Transactions>();
+    @OneToMany(mappedBy = "stock")
+    private List<csc1035.project3.table.Relation> relation = new ArrayList<csc1035.project3.table.Relation>();
 
-    public List<Transactions> getTransactions() {
-        return transactions;
+    public List<csc1035.project3.table.Relation> getTransactions() {
+        return relation;
     }
 
-    public void setTransactions(List<Transactions> transactions) {
-        this.transactions = transactions;
+    public void setTransactions(List<csc1035.project3.table.Relation> transactions) {
+        this.relation = transactions;
     }
 
     public int getId() {

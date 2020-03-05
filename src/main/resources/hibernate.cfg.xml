@@ -15,7 +15,8 @@
         <property name="hbm2ddl.auto">create</property>
 
         <mapping class="csc1035.project3.transactions.table.Transactions" /> <!--- Add a new mapping class for a new table in the database -->
-        <mapping class="csc1035.project3.stock.table.Stock" />
+        <mapping class="csc1035.project3.stock.table.Stocks" />
+        <mapping class="csc1035.project3.table.Relation" />
 
     </session-factory>
 </hibernate-configuration>
