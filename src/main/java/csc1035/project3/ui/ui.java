@@ -27,9 +27,9 @@ public class ui {
             /*
             * Please add your functions below.
             */
-            String[] arguments = new String[]{"123"};  // use if running a main method.
+            //  String[] arguments = new String[]{"123"};  // use if running a main method.
             if (choice.equals("lookup")) {
-                csc1035.project3.lookup.stockLookup.main(arguments);
+                csc1035.project3.lookup.stockLookup.start();
             }
             if (choice.equals("insert - unique")) {
                 csc1035.project3.insert.Input.user();

@@ -9,7 +9,7 @@ import org.hibernate.Session;
 import java.util.*;
 
 public class stockLookup {
-    public static void main(String[] args){
+    public static void start(){
         HashMap<String, String> values = new HashMap<String, String>();
         values.put("id", "WHERE product_ID = ");
         values.put("name", "WHERE product_name LIKE ");
