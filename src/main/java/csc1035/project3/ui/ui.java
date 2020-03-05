@@ -9,6 +9,7 @@ public class ui {
         boolean running = true;
         System.out.println("Welcome");
         while(running) {
+            System.out.println("Type \"help\" to see options");
             System.out.println("What would you like to do?");
             Scanner scanner = new Scanner(System.in);
             boolean valid = false;
