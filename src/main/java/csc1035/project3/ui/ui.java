@@ -9,6 +9,7 @@ public class ui {
         boolean running = true;
         System.out.println("Welcome");
         while(running) {
+            System.out.println("Type \"help\" to see options");
             System.out.println("What would you like to do?");
             Scanner scanner = new Scanner(System.in);
             boolean valid = false;
@@ -27,20 +28,22 @@ public class ui {
             /*
             * Please add your functions below.
             */
-            //  String[] arguments = new String[]{"123"};  // use if running a main method.
-            if (choice.equals("lookup")) {
-                csc1035.project3.lookup.stockLookup.start();
-            }
-            if (choice.equals("insert - unique")) {
-                csc1035.project3.insert.Input.user();
-            }
-            if (choice.equals("insert - csv")) {
-                csc1035.project3.insert.Input.CSV();
-            }
-            if (choice.equals("exit")) {
-                running = false;
-                csc1035.project3.warning.warning_quantity.warning();
-                System.out.println("Exiting program, goodbye.");
+
+            switch (choice){
+                case "lookup":
+                    csc1035.project3.lookup.stockLookup.start();
+                    break;
+                case "insert - unique":
+                    csc1035.project3.insert.Input.user();
+                    break;
+                case "insert - csv":
+                    csc1035.project3.insert.Input.CSV();
+                    break;
+                case "exit":
+                    running = false;
+                    csc1035.project3.warning.warning_quantity.warning();
+                    System.out.println("Exiting program, goodbye.");
+                    break;
             }
         }
 
