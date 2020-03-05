@@ -9,7 +9,7 @@ import org.hibernate.Session;
 import java.util.*;
 
 public class stockLookup {
-    public static void start(){
+    public static List<Table_Initializer> start(){
         HashMap<String, String> values = new HashMap<String, String>();
         values.put("id", "WHERE product_ID = ");
         values.put("name", "WHERE product_name LIKE ");
@@ -27,8 +27,9 @@ public class stockLookup {
             System.out.print("Enter search type\n>>>  ");
             String choice = type_scanner.nextLine();
             if(values.keySet().contains(choice)){
-                get_data(choice, values.get(choice));
+                List<Table_Initializer> data = get_data(choice, values.get(choice));
                 asking = false;
+                return data;
             } else if(choice.toLowerCase().equals("help")){
                 for(String key : values.keySet()){
                     System.out.println(key);
@@ -37,11 +38,12 @@ public class stockLookup {
                 System.out.println("Invalid category");
             }
         }
+        return null;
     }
     /**
      * Searches the Stock table for items.
      */
-    public static void get_data(String type, String term){
+    public static List<Table_Initializer> get_data(String type, String term){
         /*
           List containing results to be outputted later.
          */
@@ -103,5 +105,6 @@ public class stockLookup {
 
         // Output
         output.output(data);
+        return data;
     }
 }
