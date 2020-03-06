@@ -7,7 +7,6 @@ public class New_product {
     public static void create (Table_Initializer Table_Initializer){
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Table_Initializer table_initializer = new Table_Initializer();
             table_initializer.setId(Table_Initializer.getId());
@@ -20,7 +19,7 @@ public class New_product {
             session.save(table_initializer);
             session.getTransaction().commit();
         }catch (HibernateException e) {
-            if (session!=null) session.getTransaction().rollback();
+            session.getTransaction().rollback();
             e.printStackTrace();
         }finally {
             assert session != null;
