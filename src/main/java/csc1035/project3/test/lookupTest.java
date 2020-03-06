@@ -1,6 +1,7 @@
 package csc1035.project3.test;
 
 import csc1035.project3.insert.Table_Initializer;
+import csc1035.project3.lookup.stockLookup;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,8 @@ public class lookupTest {
     @Test
     @DisplayName("Test -> Get Lookup")
     void getLookup(){
-        List<Table_Initializer> data = csc1035.project3.lookup.stockLookup.start();
+        stockLookup test_lookup = new stockLookup();
+        List<Table_Initializer> data = test_lookup.start();
         int expected_length = 1;
         int actual = data.size();
         assertEquals(expected_length, actual);

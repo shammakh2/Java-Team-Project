@@ -1,4 +1,7 @@
 package csc1035.project3.ui;
+import csc1035.project3.insert.Input;
+import csc1035.project3.lookup.stockLookup;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -31,13 +34,16 @@ public class ui {
 
             switch (choice){
                 case "lookup":
-                    csc1035.project3.lookup.stockLookup.start();
+                    stockLookup stock = new stockLookup();
+                    stock.start();
                     break;
                 case "insert - unique":
-                    csc1035.project3.insert.Input.user();
+                    Input in_user = new Input();
+                    in_user.user();
                     break;
                 case "insert - csv":
-                    csc1035.project3.insert.Input.CSV();
+                    Input in_csv = new Input();
+                    in_csv.CSV();
                     break;
                 case "exit":
                     running = false;

@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Input implements InputInterface {
 
-    public static void CSV() {
+    public void CSV() {
         try {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter data file path (normally path is test_data.csv) or press the enter key to skip: ");
@@ -38,7 +38,7 @@ public class Input implements InputInterface {
         }
     }
 
-    public static void user() {
+    public void user() {
         try {
             String info;
             System.out.println("\n" + "Enter product details: ID,Name,Category,Perishable(true or false),cost,stock,sell price");

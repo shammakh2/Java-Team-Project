@@ -10,7 +10,7 @@ import org.hibernate.Session;
 import java.util.*;
 
 public class stockLookup implements LookupInterface {
-    public static List<Table_Initializer> start(){
+    public List<Table_Initializer> start(){
         HashMap<String, String> values = new HashMap<String, String>();
         values.put("id", "WHERE product_ID = ");
         values.put("name", "WHERE product_name LIKE ");
@@ -41,10 +41,11 @@ public class stockLookup implements LookupInterface {
         }
         return null;
     }
+
     /**
      * Searches the Stock table for items.
      */
-    public static List<Table_Initializer> get_data(String type, String term){
+    public List<Table_Initializer> get_data(String type, String term){
         /*
           List containing results to be outputted later.
          */
