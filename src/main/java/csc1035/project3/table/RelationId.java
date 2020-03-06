@@ -24,6 +24,6 @@ public class RelationId implements Serializable {
     }
 
     public void setTransactionId(int transactionId) {
-        transactionId = transactionId;
+        this.transactionId = transactionId;
     }
 }
