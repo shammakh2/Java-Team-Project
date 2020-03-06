@@ -1,9 +1,11 @@
 package csc1035.project3.insert;
 
+import csc1035.project3.Interface.InputInterface;
+
 import java.io.*;
 import java.util.*;
 
-public class Input {
+public class Input implements InputInterface {
 
     public static void CSV() {
         try {
