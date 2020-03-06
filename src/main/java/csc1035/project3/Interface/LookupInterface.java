@@ -1,8 +1,8 @@
 package csc1035.project3.Interface;
 
-public interface lookupInterface {
+public interface LookupInterface {
 
-    /* Initializes the */
+    /* */
     static void start(){}
 
 

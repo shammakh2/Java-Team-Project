@@ -1,6 +1,7 @@
 package csc1035.project3.lookup;
 
 import csc1035.project3.HibernateUtil;
+import csc1035.project3.Interface.LookupInterface;
 import csc1035.project3.insert.Table_Initializer;
 import csc1035.project3.output.output;
 import org.hibernate.HibernateException;
@@ -8,7 +9,7 @@ import org.hibernate.Session;
 
 import java.util.*;
 
-public class stockLookup {
+public class stockLookup implements LookupInterface {
     public static List<Table_Initializer> start(){
         HashMap<String, String> values = new HashMap<String, String>();
         values.put("id", "WHERE product_ID = ");
