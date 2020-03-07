@@ -13,7 +13,7 @@ public class Transactions {
     @Column
     private String customerName;
     @Column
-    private int totalCost;
+    private double totalCost;
     @OneToMany(mappedBy = "transaction")
     private List<Relation> relation = new ArrayList<Relation>();
 
@@ -33,11 +33,11 @@ public class Transactions {
         this.customerName = customerName;
     }
 
-    public int getTotalCost() {
+    public double getTotalCost() {
         return totalCost;
     }
 
-    public void setTotalCost(int totalCost) {
+    public void setTotalCost(double totalCost) {
         this.totalCost = totalCost;
     }
 

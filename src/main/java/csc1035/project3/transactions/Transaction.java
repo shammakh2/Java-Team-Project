@@ -1,46 +1,49 @@
 package csc1035.project3.transactions;
 
 import csc1035.project3.HibernateUtil;
+import csc1035.project3.stock.Temp;
 import csc1035.project3.stock.table.Stocks;
 import org.hibernate.Session;
 import csc1035.project3.transactions.table.Transactions;
 import csc1035.project3.table.Relation;
+import org.hibernate.SessionFactory;
 
 import java.io.*;
+import java.util.ArrayList;
 
 public class Transaction {
-    static Session session = HibernateUtil.getSessionFactory().openSession();
-    public static void loadStocks(){
-        try {
-            FileReader stockFile = new FileReader("src/main/resources/stock.sample.csv");
-            BufferedReader stockLine = new BufferedReader(stockFile);
-            String l;
-            session.beginTransaction();
-            while ((l = stockLine.readLine()) != null){
-                try {
+    static SessionFactory sessionF = HibernateUtil.getSessionFactory();
+    static ArrayList<ArrayList<Integer>> transactionQ = new ArrayList<ArrayList<Integer>>();
 
-                    String[] split = l.split(",");
-                    Stocks stock = new Stocks();
-                    System.out.println(Integer.parseInt(split[0]));
-                    stock.setId(Integer.parseInt(split[0]));
-                    stock.setName(split[1]);
-                    stock.setCategory(split[2]);
-                    stock.setPerishable(Boolean.parseBoolean(split[3]));
-                    stock.setCost(Double.parseDouble(split[4]));
-                    stock.setStock(Integer.parseInt(split[5]));
-                    stock.setSell_price(Double.parseDouble(split[6]));
-                    session.save(stock);
-                }catch (NumberFormatException n){
-
-                }
-            }
-            session.getTransaction().commit();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    public static void queue(int item, int remove){
+        ArrayList<Integer> unitItem = new ArrayList<Integer>();
+        unitItem.add(item);
+        unitItem.add(remove);
+        transactionQ.add(unitItem);
     }
+
+    
+
     public static void main(String[] args){
-        loadStocks();
+        Temp.loadStocks(sessionF);
+        Session session = sessionF.openSession();
+        session.beginTransaction();
+//        Transactions trans = new Transactions();
+//        Relation r = new Relation();
+//        trans.setId(1);
+//        trans.setCustomerName("Hero");
+//        trans.setTotalCost(120);
+        Stocks stock = (Stocks) session.get(Stocks.class, 2);
+        System.out.println(stock);
+//        r.setStock(stock);
+//        r.setTransaction(trans);
+//        r.setQuantity(1);
+        stock.setStock((stock.getStock()-1));
+//        session.update(stock);
+//        session.save(trans);
+//        session.save(r);
+        session.getTransaction().commit();
+        session.close();
+
     }
 }

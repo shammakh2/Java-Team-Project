@@ -3,10 +3,7 @@ package csc1035.project3.table;
 import csc1035.project3.stock.table.Stocks;
 import csc1035.project3.transactions.table.Transactions;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
+import javax.persistence.*;
 
 @Entity(name = "transaction_stock")
 public class Relation {
@@ -20,6 +17,9 @@ public class Relation {
     @ManyToOne
     @MapsId("transactionId")
     private Transactions transaction;
+
+    @Column
+    private int quantity;
 
     public RelationId getId() {
         return id;
@@ -43,5 +43,13 @@ public class Relation {
 
     public void setTransaction(Transactions transaction) {
         this.transaction = transaction;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
