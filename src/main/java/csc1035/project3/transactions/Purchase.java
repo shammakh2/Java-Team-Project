@@ -9,10 +9,27 @@ import csc1035.project3.table.Relation;
 import org.hibernate.SessionFactory;
 import java.util.ArrayList;
 
-public class Transaction implements Connection {
-    static SessionFactory sessionF = HibernateUtil.getSessionFactory();
-    static ArrayList<ArrayList<Integer>> itemQ = new ArrayList<ArrayList<Integer>>();
+/**
+ * Implementation of TransactionFramework that deals with purchases in the EPOS system.
+ * @author Shammakh
+ */
+public class Purchase implements TransactionFramework {
 
+    private static SessionFactory sessionF = HibernateUtil.getSessionFactory();
+
+    /**
+     * 2 dimensional list of items and the amount that needs to be purchased.
+     */
+    private ArrayList<ArrayList<Integer>> itemQ = new ArrayList<ArrayList<Integer>>();
+
+    /**
+     * Method that loads up or queues all items to be purchased and their amounts
+     * during 'handshake' phase
+     *
+     * @param item Id of stock
+     * @param remove Amount to add or remove from Stocks table
+     * @see #handshake()
+     */
     public void queue(int item, int remove){
         ArrayList<Integer> unitItem = new ArrayList<Integer>();
         unitItem.add(item);
@@ -20,6 +37,9 @@ public class Transaction implements Connection {
         itemQ.add(unitItem);
     }
 
+    /**
+     * Writes all purchases and changes to database
+     */
     public void handshake(){
         Session session = sessionF.openSession();
         session.beginTransaction();
@@ -28,7 +48,7 @@ public class Transaction implements Connection {
         ArrayList<Double> cost = new ArrayList<>();
         for (ArrayList<Integer> x: itemQ){
             Relation r = new Relation();
-            Stocks currentS = (Stocks) session.get(Stocks.class, x.get(0));
+            Stocks currentS = session.get(Stocks.class, x.get(0));
             r.setTransaction(transaction);
             r.setStock(currentS);
             r.setQuantity(x.get(1));
@@ -51,31 +71,11 @@ public class Transaction implements Connection {
 
 
     public static void main(String[] args){
-        Temp.loadStocks(sessionF);
-        Transaction t = new Transaction();
+        Temp.loadStocks();
+        Purchase t = new Purchase();
         t.queue(1,2);
         t.queue(4,5);
         t.queue(9,1);
         t.handshake();
-
-
-//        Session session = sessionF.openSession();
-//        session.beginTransaction();
-//        Transactions trans = new Transactions();
-//        Relation r = new Relation();
-//        trans.setId(1);
-//        trans.setCustomerName("Hero");
-//        trans.setTotalCost(120);
-//        Stocks stock = (Stocks) session.get(Stocks.class, 2);
-//        System.out.println(stock);
-//        r.setStock(stock);
-//        r.setTransaction(trans);
-//        r.setQuantity(1);
-//        stock.setStock((stock.getStock()-1));
-//        session.update(stock);
-//        session.save(trans);
-//        session.save(r);
-//        session.getTransaction().commit();
-//        session.close();
     }
 }

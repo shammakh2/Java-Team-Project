@@ -1,5 +1,6 @@
 package csc1035.project3.stock;
 
+import csc1035.project3.HibernateUtil;
 import csc1035.project3.stock.table.Stocks;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,7 +10,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Temp {
-    public static void loadStocks(SessionFactory sF){
+    public static void loadStocks(){
+        SessionFactory sF = HibernateUtil.getSessionFactory();
         try {
             FileReader stockFile = new FileReader("src/main/resources/stock.sample.csv");
             BufferedReader stockLine = new BufferedReader(stockFile);
