@@ -16,6 +16,7 @@
 
         <mapping class="csc1035.project3.insert.Table_Initializer" /><!--- Mapping to csc1035.project3.insert.Shop_Stock  -->
         <mapping class="csc1035.project3.warning.warning_quantity" /><!--- Mapping to csc1035.project3.warning.warning_quantity -->
+        <mapping class="csc1035.project3.update.update" /><!--- Mapping to csc1035.project3.update.update -->
 
     </session-factory>
 </hibernate-configuration>

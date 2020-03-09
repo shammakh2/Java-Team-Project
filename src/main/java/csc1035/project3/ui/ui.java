@@ -1,14 +1,16 @@
 package csc1035.project3.ui;
 import csc1035.project3.insert.Input;
 import csc1035.project3.lookup.stockLookup;
+import csc1035.project3.update.update;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class ui {
-    public static ArrayList<String> options = new ArrayList<>(Arrays.asList("lookup", "insert - unique", "insert - csv", "exit"));
-    public static void main(String[] args){
+    public static ArrayList<String> options = new ArrayList<>(Arrays.asList("lookup", "insert - unique", "insert - csv", "update", "exit"));
+    public static void main(String[] args) throws FileNotFoundException {
         boolean running = true;
         System.out.println("Welcome");
         while(running) {
@@ -44,6 +46,10 @@ public class ui {
                 case "insert - csv":
                     Input in_csv = new Input();
                     in_csv.CSV();
+                    break;
+                case "update":
+                    update update = new update();
+                    update.modify();
                     break;
                 case "exit":
                     running = false;
