@@ -51,6 +51,8 @@ public class ui {
                     update update = new update();
                     update.modify();
                     break;
+                case "shop":
+                    // Insert function to begin shopping
                 case "exit":
                     running = false;
                     csc1035.project3.warning.warning_quantity.warning();

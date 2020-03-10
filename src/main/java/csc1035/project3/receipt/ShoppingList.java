@@ -1,4 +1,4 @@
-package csc1035.project3;
+package csc1035.project3.receipt;
 
 public class ShoppingList {
     int productID;
