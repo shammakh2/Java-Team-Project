@@ -29,7 +29,9 @@ public class warning_quantity {
         } finally {
             session.close();
         }
-        output.output(data);
-        System.out.println("The quantity of these products are low, you should order some more.");
+        if (!data.isEmpty()){
+            output.output(data);
+            System.out.println("The quantity of these products are low, you should order some more.");
+        }
     }
 }
