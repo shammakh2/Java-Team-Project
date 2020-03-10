@@ -1,34 +1,29 @@
 package csc1035.project3.transactions;
 
 import csc1035.project3.HibernateUtil;
-import csc1035.project3.stock.Temp;
 import csc1035.project3.stock.table.Stocks;
-import csc1035.project3.transactions.interfaces.TransactionFramework;
-import org.hibernate.Session;
-import csc1035.project3.transactions.table.Transactions;
 import csc1035.project3.table.RelationTransaction;
+import csc1035.project3.transactions.interfaces.TransactionFramework;
+import csc1035.project3.transactions.table.Transactions;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+
 import java.util.ArrayList;
 
-/**
- * Implementation of TransactionFramework that deals with purchases in the EPOS system.
- * @author Shammakh
- */
-public class Purchase implements TransactionFramework {
-
+public class Refund implements TransactionFramework {
     private static SessionFactory sessionF = HibernateUtil.getSessionFactory();
 
     /**
-     * 2 dimensional list of items and the amount that needs to be purchased.
+     * 2 dimensional list of items and the amount that needs to be refunded.
      */
     private ArrayList<ArrayList<Integer>> itemQ = new ArrayList<ArrayList<Integer>>();
 
     /**
-     * Method that loads up or queues all items to be purchased and their amounts
+     * Method that loads up or queues all items to be returned and their amounts
      * during 'handshake' phase
      *
      * @param item Id of stock
-     * @param remove Amount to remove from Stocks table
+     * @param remove Amount to add to Stocks table
      * @see #handshake()
      */
     @Override
@@ -40,7 +35,7 @@ public class Purchase implements TransactionFramework {
     }
 
     /**
-     * Writes all exchanges and changes to database
+     * Writes all refunds and changes to database
      */
     @Override
     public void handshake(){
@@ -49,7 +44,7 @@ public class Purchase implements TransactionFramework {
         Transactions transaction = new Transactions();
         transaction.setId(1);
         transaction.setCustomerName("Any");
-        transaction.setType("Purchase");
+        transaction.setType("Refund");
         session.save(transaction);
         ArrayList<Double> cost = new ArrayList<>();
         for (ArrayList<Integer> x: itemQ){
@@ -59,7 +54,7 @@ public class Purchase implements TransactionFramework {
             r.setStock(currentS);
             r.setQuantity(x.get(1));
             cost.add((currentS.getSell_price()*x.get(1)));
-            currentS.setStock((currentS.getStock() - x.get(1)));
+            currentS.setStock((currentS.getStock() + x.get(1)));
             transaction.getRelation().add(r);
             session.save(r);
             session.update(currentS);
@@ -72,27 +67,5 @@ public class Purchase implements TransactionFramework {
         session.update(transaction);
         session.getTransaction().commit();
         session.close();
-    }
-
-
-
-    public static void main(String[] args){
-        Temp.loadStocks();
-        Purchase t = new Purchase();
-        t.queue(1,2);
-//        t.queue(4,5);
-        t.queue(9,1);
-        t.handshake();
-
-        Exchange e = new Exchange();
-        e.queue(1,2);
-//        e.queue(4,5);
-//        e.queue(9,1);
-        e.handshake();
-
-        Refund r = new Refund();
-        r.queue(9,2);
-        r.handshake();
-
     }
 }

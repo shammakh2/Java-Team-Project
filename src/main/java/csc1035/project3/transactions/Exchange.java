@@ -4,6 +4,7 @@ import csc1035.project3.HibernateUtil;
 import csc1035.project3.stock.table.Stocks;
 import csc1035.project3.table.RelationExchange;
 import csc1035.project3.table.RelationTransaction;
+import csc1035.project3.transactions.interfaces.TransactionFramework;
 import csc1035.project3.transactions.table.Exchanges;
 import csc1035.project3.transactions.table.Transactions;
 import org.hibernate.Session;
@@ -16,16 +17,16 @@ public class Exchange implements TransactionFramework {
     private static SessionFactory sessionF = HibernateUtil.getSessionFactory();
 
     /**
-     * 2 dimensional list of items and the amount that needs to be purchased.
+     * 2 dimensional list of items and the amount that needs to be exchanged.
      */
     private ArrayList<ArrayList<Integer>> itemQ = new ArrayList<ArrayList<Integer>>();
 
     /**
-     * Method that loads up or queues all items to be purchased and their amounts
+     * Method that loads up or queues all items to be exchanged and their amounts
      * during 'handshake' phase
      *
      * @param item Id of stock
-     * @param add  Amount to add or remove from Stocks table
+     * @param add  Amount to add to Stocks table
      * @see #handshake()
      */
     @Override
@@ -37,7 +38,7 @@ public class Exchange implements TransactionFramework {
     }
 
     /**
-     * Writes all purchases and changes to database
+     * Writes all exchanges to database
      */
     @Override
     public void handshake() {
@@ -66,6 +67,7 @@ public class Exchange implements TransactionFramework {
             session.save(re);
             session.update(currentS);
         }
+        itemQ.clear();
         double sum = 0;
         for (Double i : cost) {
             sum += i;

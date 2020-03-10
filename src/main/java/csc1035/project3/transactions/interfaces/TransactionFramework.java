@@ -1,4 +1,4 @@
-package csc1035.project3.transactions;
+package csc1035.project3.transactions.interfaces;
 
 import org.hibernate.SessionFactory;
 
