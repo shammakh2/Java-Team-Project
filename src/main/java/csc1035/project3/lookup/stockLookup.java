@@ -40,7 +40,6 @@ public class stockLookup {
         }
         return null;
     }
-
     /**
      * Searches the Stock table for items.
      */
@@ -79,7 +78,7 @@ public class stockLookup {
             search_item = search_item.replace(">", "");
         }
 
-        // Read
+        // Reads data from database using search term
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             session.beginTransaction();
@@ -104,7 +103,7 @@ public class stockLookup {
             session.close();
         }
 
-        // Output
+        // Outputs the data in a table
         output.output(data);
         return data;
     }

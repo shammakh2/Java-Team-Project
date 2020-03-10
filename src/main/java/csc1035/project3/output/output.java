@@ -7,9 +7,10 @@ import java.util.List;
 public class output {
     public static void output(List<Table_Initializer> data){
 
-        int max_length = 10;
+        int max_length = 10;  // Base length from titles
         for(Table_Initializer item: data){
             if(item.getName().length() > max_length){
+                // Updates max length of name column if item name is longer than current max
                 max_length = item.getName().length();
             }
         }
@@ -23,8 +24,8 @@ public class output {
         System.out.format("| Item ID         | Item Name"+title_text+" |  Quantity  | Category   | Cost       | Sell Price | Perishable |%n");
         System.out.format("+-----------------+"+row_text+"+------------+------------+------------+------------+------------+%n");
         for (Table_Initializer item : data) {
+            // Prints out database row with formatting from variable align.
             System.out.format(align, item.getId(), item.getName(), item.getStock(), item.getCategory(), item.getCost(), item.getSell_price(), item.getPerishable());
-            // Prints out database row
         }
         System.out.format("+-----------------+"+row_text+"+------------+------------+------------+------------+------------+%n");
     }
