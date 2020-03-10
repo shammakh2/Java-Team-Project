@@ -5,7 +5,7 @@ import csc1035.project3.stock.Temp;
 import csc1035.project3.stock.table.Stocks;
 import org.hibernate.Session;
 import csc1035.project3.transactions.table.Transactions;
-import csc1035.project3.table.Relation;
+import csc1035.project3.table.RelationTransaction;
 import org.hibernate.SessionFactory;
 import java.util.ArrayList;
 
@@ -27,9 +27,10 @@ public class Purchase implements TransactionFramework {
      * during 'handshake' phase
      *
      * @param item Id of stock
-     * @param remove Amount to add or remove from Stocks table
+     * @param remove Amount to add to Stocks table
      * @see #handshake()
      */
+    @Override
     public void queue(int item, int remove){
         ArrayList<Integer> unitItem = new ArrayList<Integer>();
         unitItem.add(item);
@@ -38,16 +39,20 @@ public class Purchase implements TransactionFramework {
     }
 
     /**
-     * Writes all purchases and changes to database
+     * Writes all exchanges and changes to database
      */
+    @Override
     public void handshake(){
         Session session = sessionF.openSession();
         session.beginTransaction();
         Transactions transaction = new Transactions();
+        transaction.setId(1);
         transaction.setCustomerName("Any");
+        transaction.setType("Purchase");
+        session.save(transaction);
         ArrayList<Double> cost = new ArrayList<>();
         for (ArrayList<Integer> x: itemQ){
-            Relation r = new Relation();
+            RelationTransaction r = new RelationTransaction();
             Stocks currentS = session.get(Stocks.class, x.get(0));
             r.setTransaction(transaction);
             r.setStock(currentS);
@@ -63,7 +68,7 @@ public class Purchase implements TransactionFramework {
             sum += i;
         }
         transaction.setTotalCost(sum);
-        session.save(transaction);
+        session.update(transaction);
         session.getTransaction().commit();
         session.close();
     }
@@ -74,8 +79,14 @@ public class Purchase implements TransactionFramework {
         Temp.loadStocks();
         Purchase t = new Purchase();
         t.queue(1,2);
-        t.queue(4,5);
-        t.queue(9,1);
+//        t.queue(4,5);
+//        t.queue(9,1);
         t.handshake();
+
+        Exchange e = new Exchange();
+        e.queue(1,2);
+//        e.queue(4,5);
+//        e.queue(9,1);
+        e.handshake();
     }
 }

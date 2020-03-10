@@ -1,7 +1,7 @@
 package csc1035.project3.stock.table;
 
-import csc1035.project3.transactions.table.Transactions;
-import csc1035.project3.table.Relation;
+import csc1035.project3.table.RelationExchange;
+import csc1035.project3.table.RelationTransaction;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +23,10 @@ public class Stocks {
     private int stock;
     @Column
     private double sell_price;
-    @OneToMany(mappedBy = "stock")
-    private List<csc1035.project3.table.Relation> relation = new ArrayList<csc1035.project3.table.Relation>();
-
-    public List<csc1035.project3.table.Relation> getTransactions() {
-        return relation;
-    }
-
-    public void setTransactions(List<csc1035.project3.table.Relation> transactions) {
-        this.relation = transactions;
-    }
+//    @OneToMany(mappedBy = "stock")
+//    private List<RelationTransaction> relation = new ArrayList<RelationTransaction>();
+//    @OneToMany(mappedBy = "stock")
+//    private List<RelationExchange> relationE = new ArrayList<RelationExchange>();
 
     public int getId() {
         return id;
@@ -89,4 +83,20 @@ public class Stocks {
     public void setSell_price(double sell_price) {
         this.sell_price = sell_price;
     }
+
+//    public List<RelationTransaction> getRelation() {
+//        return relation;
+//    }
+//
+//    public void setRelation(List<RelationTransaction> relation) {
+//        this.relation = relation;
+//    }
+
+//    public List<RelationExchange> getRelationE() {
+//        return relationE;
+//    }
+//
+//    public void setRelationE(List<RelationExchange> relationE) {
+//        this.relationE = relationE;
+//    }
 }

@@ -1,12 +1,12 @@
 package csc1035.project3.table;
 
 import csc1035.project3.stock.table.Stocks;
-import csc1035.project3.transactions.table.Transactions;
+import csc1035.project3.transactions.table.Exchanges;
 
 import javax.persistence.*;
 
-@Entity(name = "transaction_stock")
-public class Relation {
+@Entity(name = "transaction_exchange")
+public class RelationExchange {
 
     @EmbeddedId
     private RelationId id = new RelationId();
@@ -16,8 +16,7 @@ public class Relation {
     private Stocks stock;
     @ManyToOne
     @MapsId("transactionId")
-    private Transactions transaction;
-
+    private Exchanges exchanges;
     @Column
     private int quantity;
 
@@ -37,18 +36,17 @@ public class Relation {
         this.stock = stock;
     }
 
-    public Transactions getTransaction() {
-        return transaction;
+    public Exchanges getExchanges() {
+        return exchanges;
     }
 
-    public void setTransaction(Transactions transaction) {
-        this.transaction = transaction;
+    public void setExchanges(Exchanges exchange) {
+        this.exchanges = exchange;
     }
 
     public int getQuantity() {
         return quantity;
     }
-
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }

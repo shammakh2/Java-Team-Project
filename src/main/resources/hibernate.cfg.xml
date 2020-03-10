@@ -7,16 +7,18 @@
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost/data</property>
-        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.username">ruru</property>
         <property name="hibernate.connection.password">root</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
         <property name="hbm2ddl.auto">create</property>
 
         <mapping class="csc1035.project3.transactions.table.Transactions" /> <!--- Add a new mapping class for a new table in the database -->
         <mapping class="csc1035.project3.stock.table.Stocks" />
-        <mapping class="csc1035.project3.table.Relation" />
+        <mapping class="csc1035.project3.table.RelationTransaction" />
+        <mapping class="csc1035.project3.transactions.table.Exchanges" />
+        <mapping class="csc1035.project3.table.RelationExchange" />
 
     </session-factory>
 </hibernate-configuration>
