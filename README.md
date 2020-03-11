@@ -15,7 +15,7 @@ any of its fields : id, name, category, if it is perishable or not, cost, quanti
 and sell price.
 
 The command ```update``` lets the user update product's fields in the database using the 
-the product id.
+the product's id.
 
 The command ```exit``` lets the user escape the program and prints out all of the 
 products than have a quantity inferior to 5.
