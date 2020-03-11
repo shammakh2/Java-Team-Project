@@ -14,7 +14,7 @@ public class PrintReceipt {
         tempShoppingList();
     }
 
-    public static void tempShoppingList(){
+    public static void tempShoppingList() throws IOException {
         // This simulates the data I obtain from the shopping basket/ transaction.
         int fakeID = 244351324;
         int fakeQuantity = 7;
@@ -22,7 +22,8 @@ public class PrintReceipt {
         ArrayList<ShoppingList> tempArray = new ArrayList<>();
         ShoppingList tempList = new ShoppingList(fakeID, fakeQuantity, fakePrice);
         tempArray.add(tempList);
-        NewAsciiTableReceipt(tempArray);
+        //NewAsciiTableReceipt(tempArray);
+        ReceiptToFile(tempArray);
     }
 
     public static void NewAsciiTableReceipt(ArrayList<ShoppingList> asciiForReceipt) {
@@ -52,10 +53,11 @@ public class PrintReceipt {
 
 
     }
-    public static void ReceiptToFile() throws IOException {
+    public static void ReceiptToFile(ArrayList<ShoppingList> asciiForReceipt) throws IOException {
         // Write the purchase receipt to a file rather than to console
 
         FileWriter receiptPrint = new FileWriter("Receipts.txt", true);
+        String leftAlignFormat = "| %-15s | £%6.2f | %-8d | £%7.2f |%n";
         receiptPrint.append(String.format("%n"));
         receiptPrint.append("New Receipt:");
         receiptPrint.append(String.format("%n"));
@@ -63,6 +65,9 @@ public class PrintReceipt {
         receiptPrint.append(String.format("|     Product     |  Price  | Quantity |   Total  |%n"));
         receiptPrint.append(String.format("+-----------------+---------+----------+----------+%n"));
         //Append each product
+        for (ShoppingList data : asciiForReceipt){
+            receiptPrint.append(String.format(leftAlignFormat, data.getProductID(), data.getPrice(), data.getQuantity(), (data.getPrice() * data.getQuantity())));
+        }
         receiptPrint.flush();
         receiptPrint.close();
     }
