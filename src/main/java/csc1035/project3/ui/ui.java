@@ -1,4 +1,5 @@
 package csc1035.project3.ui;
+
 import csc1035.project3.HibernateUtil;
 import csc1035.project3.insert.Input;
 import csc1035.project3.lookup.stockLookup;
@@ -21,11 +22,12 @@ import java.util.Scanner;
 
 public class ui {
     private static Scanner scanner = new Scanner(System.in);
-    public static ArrayList<String> options = new ArrayList<>(Arrays.asList("lookup", "insert - unique", "insert - csv", "update","purchase", "exchange - return", "exchange - repurchase",  "refund", "exit"));
-    public static void start(){
+    public static ArrayList<String> options = new ArrayList<>(Arrays.asList("lookup", "insert - unique", "insert - csv", "update", "purchase", "exchange - return", "exchange - repurchase", "refund", "exit"));
+
+    public static void start() {
         boolean running = true;
         System.out.println("Welcome");
-        while(running) {
+        while (running) {
             System.out.println("Type \"help\" to see options");
             System.out.println("What would you like to do?");
             Scanner scanner = new Scanner(System.in);
@@ -43,10 +45,10 @@ public class ui {
                 }
             }
             /*
-            * Please add your functions below.
-            */
+             * Please add your functions below.
+             */
 
-            switch (choice){
+            switch (choice) {
                 case "lookup":
                     stockLookup stock = new stockLookup();
                     stock.start();
@@ -64,89 +66,106 @@ public class ui {
                     update.modify();
                     break;
                 case "purchase":
-                    Purchase purch = new Purchase();
-                    while(true){
-                        System.out.println("Please enter the id of the items you want to purchase or for multiple items," +
-                                " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
-                                " done entering all items, type in 'done'");
-                        String l = scanner.nextLine();
-                        if (l.equalsIgnoreCase("done")){
-                            break;
-                        }else if (l.split(",").length == 2){
-                            String[] items = l.split(",");
-                            purch.queue(Integer.parseInt(items[0]), Integer.parseInt(items[1]));
-                        }else if(l.split(",").length == 1){
-                            purch.queue(Integer.parseInt(l.split(",")[0]));
+                    try {
+                        Purchase purch = new Purchase();
+                        while (true) {
+                            System.out.println("Please enter the id of the items you want to purchase or for multiple items," +
+                                    " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
+                                    " done entering all items, type in 'done'");
+                            String l = scanner.nextLine();
+                            if (l.equalsIgnoreCase("done")) {
+                                break;
+                            } else if (l.split(",").length == 2) {
+                                String[] items = l.split(",");
+                                purch.queue(Integer.parseInt(items[0]), Integer.parseInt(items[1]));
+                            } else if (l.split(",").length == 1) {
+                                purch.queue(Integer.parseInt(l.split(",")[0]));
+                            }
                         }
+                        int receipt = purch.handshake();
+                        PrintReceipt.pullUpItems(receipt);
+                        System.out.println("Transaction complete");
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Invalid entry please try again.");
                     }
-                    int receipt = purch.handshake();
-                    PrintReceipt.pullUpItems(receipt);
-                    System.out.println("Transaction complete");
-                    break;
                 case "exchange - return":
-                    Exchange e = new Exchange();
-                    while(true){
-                        System.out.println("Please enter the id of the items you want to purchase or for multiple items," +
-                                " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
-                                " done entering all items, type in 'done'");
-                        String l = scanner.nextLine();
-                        if (l.equalsIgnoreCase("done")){
-                            break;
-                        }else if (l.split(",").length == 2){
-                            String[] items = l.split(",");
-                            e.queue(Integer.parseInt(items[0]), Integer.parseInt(items[1]));
-                        }else if(l.split(",").length == 1){
-                            e.queue(Integer.parseInt(l.split(",")[0]));
-                        }
-                    }
-                    e.handshake();
-                    System.out.println("Transaction complete");
-                    break;
-                case "exchange - repurchase":
-                    Session session = HibernateUtil.getSessionFactory().openSession();
+                    try {
+                        Exchange e = new Exchange();
 
-                    System.out.println("Enter t id");
-                    Integer id = Integer.parseInt(scanner.nextLine());
-                    Transactions t = session.get(Transactions.class, id);
-                    Exchanges reEx = t.getExchange();
-                    double cost = t.getTotalCost();
-                    Exchange re = new Exchange();
-                    while(true){
-                        System.out.println("Please enter the id of the items you want to purchase or for multiple items," +
-                                " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
-                                " done entering all items, type in 'done'");
-                        String l = scanner.nextLine();
-                        if (l.equalsIgnoreCase("done")){
-                            break;
-                        }else if (l.split(",").length == 2){
-                            String[] items = l.split(",");
-                            re.queue(Integer.parseInt(items[0]), Integer.parseInt(items[1]));
-                        }else if(l.split(",").length == 1){
-                            re.queue(Integer.parseInt(l.split(",")[0]));
+                        while (true) {
+                            System.out.println("Please enter the id of the items you want to purchase or for multiple items," +
+                                    " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
+                                    " done entering all items, type in 'done'");
+                            String l = scanner.nextLine();
+                            if (l.equalsIgnoreCase("done")) {
+                                break;
+                            } else if (l.split(",").length == 2) {
+                                String[] items = l.split(",");
+                                e.queue(Integer.parseInt(items[0]), Integer.parseInt(items[1]));
+                            } else if (l.split(",").length == 1) {
+                                e.queue(Integer.parseInt(l.split(",")[0]));
+                            }
                         }
+                        e.handshake();
+                        System.out.println("Transaction complete");
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Invalid entry please try again.");
                     }
-                    re.exchangePurchase(reEx,session, cost);
-                    System.out.println("Transaction complete");
-                    break;
+                case "exchange - repurchase":
+                    try {
+                        Session session = HibernateUtil.getSessionFactory().openSession();
+
+                        System.out.println("Enter transaction id");
+                        Integer id = Integer.parseInt(scanner.nextLine());
+                        Transactions t = session.get(Transactions.class, id);
+                        Exchanges reEx = t.getExchange();
+                        double cost = t.getTotalCost();
+                        Exchange re = new Exchange();
+                        while (true) {
+                            System.out.println("Please enter the id of the items you want to purchase or for multiple items," +
+                                    " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
+                                    " done entering all items, type in 'done'");
+                            String l = scanner.nextLine();
+                            if (l.equalsIgnoreCase("done")) {
+                                break;
+                            } else if (l.split(",").length == 2) {
+                                String[] items = l.split(",");
+                                re.queue(Integer.parseInt(items[0]), Integer.parseInt(items[1]));
+                            } else if (l.split(",").length == 1) {
+                                re.queue(Integer.parseInt(l.split(",")[0]));
+                            }
+                        }
+                        re.exchangePurchase(reEx, session, cost);
+                        System.out.println("Transaction complete");
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Invalid entry please try again.");
+                    }
                 case "refund":
-                    Refund r = new Refund();
-                    while(true){
-                        System.out.println("Please enter the id of the items you want to refund or for multiple items," +
-                                " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
-                                " done entering all items, type in 'done'");
-                        String l = scanner.nextLine();
-                        if (l.equalsIgnoreCase("done")){
-                            break;
-                        }else if (l.split(",").length == 2){
-                            String[] items = l.split(",");
-                            r.queue(Integer.parseInt(items[0]), Integer.parseInt(items[1]));
-                        }else if(l.split(",").length == 1){
-                            r.queue(Integer.parseInt(l.split(",")[0]));
+                    try {
+                        Refund r = new Refund();
+                        while (true) {
+                            System.out.println("Please enter the id of the items you want to refund or for multiple items," +
+                                    " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
+                                    " done entering all items, type in 'done'");
+                            String l = scanner.nextLine();
+                            if (l.equalsIgnoreCase("done")) {
+                                break;
+                            } else if (l.split(",").length == 2) {
+                                String[] items = l.split(",");
+                                r.queue(Integer.parseInt(items[0]), Integer.parseInt(items[1]));
+                            } else if (l.split(",").length == 1) {
+                                r.queue(Integer.parseInt(l.split(",")[0]));
+                            }
                         }
+                        r.handshake();
+                        System.out.println("Transaction complete");
+                        break;
+                    }catch (Exception e){
+                        System.out.println("Invalid entry please try again.");
                     }
-                    r.handshake();
-                    System.out.println("Transaction complete");
-                    break;
                 case "exit":
                     running = false;
                     warning_quantity.warning();
@@ -158,10 +177,10 @@ public class ui {
     }
 
     /**
-     *  Outputs a help message for the ui
+     * Outputs a help message for the ui
      */
-    private static void help(){
-        for(String option : options){
+    private static void help() {
+        for (String option : options) {
             System.out.println(option);
         }
     }
