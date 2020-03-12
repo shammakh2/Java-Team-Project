@@ -39,7 +39,7 @@ public class update {
                     table_initializer.setCost(Float.parseFloat(new_data));
                     break;
                 case "quantity":
-                    table_initializer.setCost(Integer.parseInt(new_data));
+                    table_initializer.setStock(Integer.parseInt(new_data));
                     break;
                 case "sell price":
                     table_initializer.setSell_price(Float.parseFloat(new_data));

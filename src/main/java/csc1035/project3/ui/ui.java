@@ -11,11 +11,8 @@ import csc1035.project3.transactions.Exchange;
 import csc1035.project3.transactions.Purchase;
 import csc1035.project3.transactions.Refund;
 import csc1035.project3.update.update;
-import net.bytebuddy.description.field.FieldDescription;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
