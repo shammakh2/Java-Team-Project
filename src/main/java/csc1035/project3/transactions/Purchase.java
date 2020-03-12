@@ -55,7 +55,11 @@ public class Purchase implements TransactionFramework {
         ArrayList<Integer> unitItem = new ArrayList<Integer>();
         unitItem.add(item);
         unitItem.add(remove);
-        itemQ.add(unitItem);
+        if(remaining < remove){
+            System.out.println("You dont have enough quantity of the entered item");
+        } else {
+            itemQ.add(unitItem);
+        }
     }
 
     /**
