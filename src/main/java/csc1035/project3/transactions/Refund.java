@@ -1,10 +1,10 @@
 package csc1035.project3.transactions;
 
 import csc1035.project3.HibernateUtil;
-import csc1035.project3.stock.table.Stocks;
-import csc1035.project3.table.RelationTransaction;
+import csc1035.project3.tables.Table_Initializer;
+import csc1035.project3.tables.transrelational.RelationTransaction;
 import csc1035.project3.transactions.interfaces.TransactionFramework;
-import csc1035.project3.transactions.table.Transactions;
+import csc1035.project3.tables.Transactions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -18,19 +18,30 @@ public class Refund implements TransactionFramework {
      */
     private ArrayList<ArrayList<Integer>> itemQ = new ArrayList<ArrayList<Integer>>();
 
+    @Override
+    public void queue(int item){
+        queue(item,1);
+    }
+
     /**
      * Method that loads up or queues all items to be returned and their amounts
      * during 'handshake' phase
      *
      * @param item Id of stock
-     * @param remove Amount to add to Stocks table
+     * @param add Amount to add to Stocks table
      * @see #handshake()
      */
     @Override
-    public void queue(int item, int remove){
+    public void queue(int item, int add){
+        for (ArrayList<Integer> x : itemQ) {
+            if (item == x.get(0)) {
+                x.add(1, x.get(1) + add);
+                return;
+            }
+        }
         ArrayList<Integer> unitItem = new ArrayList<Integer>();
         unitItem.add(item);
-        unitItem.add(remove);
+        unitItem.add(add);
         itemQ.add(unitItem);
     }
 
@@ -38,18 +49,17 @@ public class Refund implements TransactionFramework {
      * Writes all refunds and changes to database
      */
     @Override
-    public void handshake(){
+    public int handshake(){
         Session session = sessionF.openSession();
         session.beginTransaction();
         Transactions transaction = new Transactions();
         transaction.setId(1);
-        transaction.setCustomerName("Any");
         transaction.setType("Refund");
         session.save(transaction);
-        ArrayList<Double> cost = new ArrayList<>();
+        ArrayList<Float> cost = new ArrayList<>();
         for (ArrayList<Integer> x: itemQ){
             RelationTransaction r = new RelationTransaction();
-            Stocks currentS = session.get(Stocks.class, x.get(0));
+            Table_Initializer currentS = session.get(Table_Initializer.class, x.get(0));
             r.setTransaction(transaction);
             r.setStock(currentS);
             r.setQuantity(x.get(1));
@@ -60,12 +70,13 @@ public class Refund implements TransactionFramework {
             session.update(currentS);
         }
         double sum = 0;
-        for (Double i: cost){
+        for (Float i: cost){
             sum += i;
         }
         transaction.setTotalCost(sum);
         session.update(transaction);
         session.getTransaction().commit();
         session.close();
+        return transaction.getId();
     }
 }

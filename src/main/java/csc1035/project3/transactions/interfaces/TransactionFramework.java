@@ -7,6 +7,9 @@ import org.hibernate.SessionFactory;
  * @author Shammakh
  */
 public interface TransactionFramework {
+
+    void queue(int item);
+
     /**
      * Method that loads up or queues all tasks that need to be performed and items that need to be dealt with
      * during 'handshake' phase
@@ -20,5 +23,5 @@ public interface TransactionFramework {
     /**
      * Performs all the actions in the queue and writes them to the database.
      */
-    void handshake();
+    int handshake();
 }

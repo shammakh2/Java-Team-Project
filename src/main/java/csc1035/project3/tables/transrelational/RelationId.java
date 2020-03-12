@@ -1,4 +1,4 @@
-package csc1035.project3.table;
+package csc1035.project3.tables.transrelational;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;

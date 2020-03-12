@@ -1,14 +1,14 @@
 package csc1035.project3.transactions;
 
 import csc1035.project3.HibernateUtil;
-import csc1035.project3.stock.Temp;
-import csc1035.project3.stock.table.Stocks;
+import csc1035.project3.tables.Table_Initializer;
 import csc1035.project3.transactions.interfaces.TransactionFramework;
 import org.hibernate.Session;
-import csc1035.project3.transactions.table.Transactions;
-import csc1035.project3.table.RelationTransaction;
+import csc1035.project3.tables.Transactions;
+import csc1035.project3.tables.transrelational.RelationTransaction;
 import org.hibernate.SessionFactory;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Implementation of TransactionFramework that deals with purchases in the EPOS system.
@@ -17,11 +17,17 @@ import java.util.ArrayList;
 public class Purchase implements TransactionFramework {
 
     private static SessionFactory sessionF = HibernateUtil.getSessionFactory();
+    private Scanner scanner = new Scanner(System.in);
 
     /**
      * 2 dimensional list of items and the amount that needs to be purchased.
      */
     private ArrayList<ArrayList<Integer>> itemQ = new ArrayList<ArrayList<Integer>>();
+
+    @Override
+    public void queue(int item){
+        queue(item,1);
+    }
 
     /**
      * Method that loads up or queues all items to be purchased and their amounts
@@ -31,8 +37,15 @@ public class Purchase implements TransactionFramework {
      * @param remove Amount to remove from Stocks table
      * @see #handshake()
      */
+
     @Override
     public void queue(int item, int remove){
+            for (ArrayList<Integer> x : itemQ) {
+                if (item == x.get(0)) {
+                    x.add(1, x.get(1) + remove);
+                    return;
+                }
+            }
         ArrayList<Integer> unitItem = new ArrayList<Integer>();
         unitItem.add(item);
         unitItem.add(remove);
@@ -43,18 +56,17 @@ public class Purchase implements TransactionFramework {
      * Writes all exchanges and changes to database
      */
     @Override
-    public void handshake(){
+    public int handshake(){
         Session session = sessionF.openSession();
         session.beginTransaction();
         Transactions transaction = new Transactions();
         transaction.setId(1);
-        transaction.setCustomerName("Any");
         transaction.setType("Purchase");
         session.save(transaction);
-        ArrayList<Double> cost = new ArrayList<>();
+        ArrayList<Float> cost = new ArrayList<>();
         for (ArrayList<Integer> x: itemQ){
             RelationTransaction r = new RelationTransaction();
-            Stocks currentS = session.get(Stocks.class, x.get(0));
+            Table_Initializer currentS = session.get(Table_Initializer.class, x.get(0));
             r.setTransaction(transaction);
             r.setStock(currentS);
             r.setQuantity(x.get(1));
@@ -64,35 +76,27 @@ public class Purchase implements TransactionFramework {
             session.save(r);
             session.update(currentS);
         }
-        double sum = 0;
-        for (Double i: cost){
+        float sum = 0;
+        for (Float i: cost){
             sum += i;
         }
         transaction.setTotalCost(sum);
+        float customerPay;
+        while (true) {
+            System.out.println("Amount required: " + sum);
+            System.out.println("Amount paid by customer");
+            customerPay = scanner.nextFloat();
+            if ((customerPay - sum) >= 0){
+                break;
+            }else{
+                System.out.println("Customer has not paid enough for purchase");
+            }
+        }
+        transaction.setTotalPaid(customerPay);
+        System.out.println("The change needed to be returned to customer is: " + (customerPay - sum));
         session.update(transaction);
         session.getTransaction().commit();
         session.close();
-    }
-
-
-
-    public static void main(String[] args){
-        Temp.loadStocks();
-        Purchase t = new Purchase();
-        t.queue(1,2);
-//        t.queue(4,5);
-        t.queue(9,1);
-        t.handshake();
-
-        Exchange e = new Exchange();
-        e.queue(1,2);
-//        e.queue(4,5);
-//        e.queue(9,1);
-        e.handshake();
-
-        Refund r = new Refund();
-        r.queue(9,2);
-        r.handshake();
-
+        return transaction.getId();
     }
 }

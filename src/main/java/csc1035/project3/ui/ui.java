@@ -1,7 +1,18 @@
 package csc1035.project3.ui;
+import csc1035.project3.HibernateUtil;
 import csc1035.project3.insert.Input;
 import csc1035.project3.lookup.stockLookup;
+import csc1035.project3.receipt.PrintReceipt;
+import csc1035.project3.tables.Exchanges;
+import csc1035.project3.tables.Transactions;
+import csc1035.project3.tables.warning_quantity;
+import csc1035.project3.transactions.Exchange;
+import csc1035.project3.transactions.Purchase;
+import csc1035.project3.transactions.Refund;
 import csc1035.project3.update.update;
+import net.bytebuddy.description.field.FieldDescription;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -9,8 +20,9 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class ui {
-    public static ArrayList<String> options = new ArrayList<>(Arrays.asList("lookup", "insert - unique", "insert - csv", "update", "exit"));
-    public static void main(String[] args) throws FileNotFoundException {
+    private static Scanner scanner = new Scanner(System.in);
+    public static ArrayList<String> options = new ArrayList<>(Arrays.asList("lookup", "insert - unique", "insert - csv", "update","purchase", "exchange - return", "exchange - repurchase",  "refund", "exit"));
+    public static void start(){
         boolean running = true;
         System.out.println("Welcome");
         while(running) {
@@ -51,11 +63,93 @@ public class ui {
                     update update = new update();
                     update.modify();
                     break;
-                case "shop":
-                    // Insert function to begin shopping
+                case "purchase":
+                    Purchase purch = new Purchase();
+                    while(true){
+                        System.out.println("Please enter the id of the items you want to purchase or for multiple items," +
+                                " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
+                                " done entering all items, type in 'done'");
+                        String l = scanner.nextLine();
+                        if (l.equalsIgnoreCase("done")){
+                            break;
+                        }else if (l.split(",").length == 2){
+                            String[] items = l.split(",");
+                            purch.queue(Integer.parseInt(items[0]), Integer.parseInt(items[1]));
+                        }else if(l.split(",").length == 1){
+                            purch.queue(Integer.parseInt(l.split(",")[0]));
+                        }
+                    }
+                    int receipt = purch.handshake();
+                    PrintReceipt.pullUpItems(receipt);
+                    System.out.println("Transaction complete");
+                    break;
+                case "exchange - return":
+                    Exchange e = new Exchange();
+                    while(true){
+                        System.out.println("Please enter the id of the items you want to purchase or for multiple items," +
+                                " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
+                                " done entering all items, type in 'done'");
+                        String l = scanner.nextLine();
+                        if (l.equalsIgnoreCase("done")){
+                            break;
+                        }else if (l.split(",").length == 2){
+                            String[] items = l.split(",");
+                            e.queue(Integer.parseInt(items[0]), Integer.parseInt(items[1]));
+                        }else if(l.split(",").length == 1){
+                            e.queue(Integer.parseInt(l.split(",")[0]));
+                        }
+                    }
+                    e.handshake();
+                    System.out.println("Transaction complete");
+                    break;
+                case "exchange - repurchase":
+                    Session session = HibernateUtil.getSessionFactory().openSession();
+
+                    System.out.println("Enter t id");
+                    Integer id = Integer.parseInt(scanner.nextLine());
+                    Transactions t = session.get(Transactions.class, id);
+                    Exchanges reEx = t.getExchange();
+                    double cost = t.getTotalCost();
+                    Exchange re = new Exchange();
+                    while(true){
+                        System.out.println("Please enter the id of the items you want to purchase or for multiple items," +
+                                " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
+                                " done entering all items, type in 'done'");
+                        String l = scanner.nextLine();
+                        if (l.equalsIgnoreCase("done")){
+                            break;
+                        }else if (l.split(",").length == 2){
+                            String[] items = l.split(",");
+                            re.queue(Integer.parseInt(items[0]), Integer.parseInt(items[1]));
+                        }else if(l.split(",").length == 1){
+                            re.queue(Integer.parseInt(l.split(",")[0]));
+                        }
+                    }
+                    re.exchangePurchase(reEx,session, cost);
+                    System.out.println("Transaction complete");
+                    break;
+                case "refund":
+                    Refund r = new Refund();
+                    while(true){
+                        System.out.println("Please enter the id of the items you want to refund or for multiple items," +
+                                " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
+                                " done entering all items, type in 'done'");
+                        String l = scanner.nextLine();
+                        if (l.equalsIgnoreCase("done")){
+                            break;
+                        }else if (l.split(",").length == 2){
+                            String[] items = l.split(",");
+                            r.queue(Integer.parseInt(items[0]), Integer.parseInt(items[1]));
+                        }else if(l.split(",").length == 1){
+                            r.queue(Integer.parseInt(l.split(",")[0]));
+                        }
+                    }
+                    r.handshake();
+                    System.out.println("Transaction complete");
+                    break;
                 case "exit":
                     running = false;
-                    csc1035.project3.warning.warning_quantity.warning();
+                    warning_quantity.warning();
                     System.out.println("Exiting program, goodbye.");
                     break;
             }

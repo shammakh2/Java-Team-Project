@@ -1,7 +1,7 @@
-package csc1035.project3.table;
+package csc1035.project3.tables.transrelational;
 
-import csc1035.project3.stock.table.Stocks;
-import csc1035.project3.transactions.table.Transactions;
+import csc1035.project3.tables.Table_Initializer;
+import csc1035.project3.tables.Transactions;
 
 import javax.persistence.*;
 
@@ -14,7 +14,7 @@ public class RelationTransaction {
 
     @ManyToOne
     @MapsId("stockId")
-    private Stocks stock;
+    private Table_Initializer stock;
     @ManyToOne
     @MapsId("transactionId")
     private Transactions transaction;
@@ -30,11 +30,11 @@ public class RelationTransaction {
         this.id = id;
     }
 
-    public Stocks getStock() {
+    public Table_Initializer getStock() {
         return stock;
     }
 
-    public void setStock(Stocks stock) {
+    public void setStock(Table_Initializer stock) {
         this.stock = stock;
     }
 

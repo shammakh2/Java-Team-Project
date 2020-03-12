@@ -1,6 +1,6 @@
-package csc1035.project3.transactions.table;
+package csc1035.project3.tables;
 
-import csc1035.project3.table.RelationTransaction;
+import csc1035.project3.tables.transrelational.RelationTransaction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,13 +12,13 @@ public class Transactions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
-    private String customerName;
-    @Column
     private double totalCost;
     @OneToMany(mappedBy = "transaction")
     private List<RelationTransaction> relation = new ArrayList<RelationTransaction>();
     @Column
     private String type;
+    @Column
+    private float totalPaid;
     @OneToOne
     private Exchanges exchange;
 
@@ -31,12 +31,12 @@ public class Transactions {
         this.id = id;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public float getTotalPaid() {
+        return totalPaid;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setTotalPaid(float totalPaid) {
+        this.totalPaid = totalPaid;
     }
 
     public double getTotalCost() {

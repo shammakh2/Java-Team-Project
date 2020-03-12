@@ -1,5 +1,7 @@
 package csc1035.project3.insert;
 
+import csc1035.project3.tables.Table_Initializer;
+
 import java.io.*;
 import java.util.*;
 

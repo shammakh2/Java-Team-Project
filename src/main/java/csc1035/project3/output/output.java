@@ -1,6 +1,6 @@
 package csc1035.project3.output;
 
-import csc1035.project3.insert.Table_Initializer;
+import csc1035.project3.tables.Table_Initializer;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package csc1035.project3.transactions.table;
+package csc1035.project3.tables;
 
-import csc1035.project3.table.RelationExchange;
+import csc1035.project3.tables.transrelational.RelationExchange;
 
 import javax.persistence.*;
 import java.util.ArrayList;

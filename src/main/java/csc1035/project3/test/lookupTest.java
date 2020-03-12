@@ -1,8 +1,7 @@
 package csc1035.project3.test;
 
-import csc1035.project3.insert.Table_Initializer;
+import csc1035.project3.tables.Table_Initializer;
 import csc1035.project3.lookup.stockLookup;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

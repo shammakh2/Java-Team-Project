@@ -1,6 +1,10 @@
-package csc1035.project3.insert;
+package csc1035.project3.tables;
 
 import javax.persistence.*;
+
+/**
+ * @author Eliott Haurat
+ */
 
 @Entity(name = "Stock") //Table name
 public class Table_Initializer {
