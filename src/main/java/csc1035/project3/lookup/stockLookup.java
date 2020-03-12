@@ -107,4 +107,36 @@ public class stockLookup {
         output.output(data);
         return data;
     }
+
+    // New method to search from remote string
+    public void remoteLookup(String searchTerm){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        boolean itemAvailable = false;
+        String search_item = searchTerm;
+        String search_term = "";
+        try {
+            session.beginTransaction();
+            String term = "WHERE product_name LIKE ";
+            if(!itemAvailable){
+                search_term = "FROM Stock " + term + "'%"+ search_item +"%'";
+            } else {
+                search_term = "FROM Stock " + term + search_item;
+            }
+            List stock = session.createQuery(search_term).list();
+            for (Iterator<Table_Initializer> iterator = stock.iterator(); iterator.hasNext();){
+                Table_Initializer item = iterator.next();
+                System.out.println(item);
+            }
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            if (session!=null) session.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        // Outputs the data in a table
+        return;
+
+    }
 }
