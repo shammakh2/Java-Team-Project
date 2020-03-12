@@ -13,7 +13,7 @@ public class Table_Initializer {
     }
 
     @Id
-    @Column(name = "product_ID", updatable = false, nullable = false)
+    @Column(name = "product_ID", nullable = false)
     private int id;
 
     @Column(name = "product_name")

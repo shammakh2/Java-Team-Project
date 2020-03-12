@@ -4,20 +4,33 @@ import csc1035.project3.tables.Table_Initializer;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
+
 public class New_product {
-    public static void create (Table_Initializer Table_Initializer){
+    public static void create (Table_Initializer tableInitializer){
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
+            Table_Initializer origin = session.get(Table_Initializer.class, tableInitializer.getId());
             session.beginTransaction();
-            Table_Initializer table_initializer = new Table_Initializer();
-            table_initializer.setId(Table_Initializer.getId());
-            table_initializer.setName(Table_Initializer.getName());
-            table_initializer.setCategory(Table_Initializer.getCategory());
-            table_initializer.setPerishable(Table_Initializer.getPerishable());
-            table_initializer.setCost(Table_Initializer.getCost());
-            table_initializer.setStock(Table_Initializer.getStock());
-            table_initializer.setSell_price(Table_Initializer.getSell_price());
-            session.save(table_initializer);
+            if (origin == null) {
+                Table_Initializer table_initializer = new Table_Initializer();
+                table_initializer.setId(tableInitializer.getId());
+                table_initializer.setName(tableInitializer.getName());
+                table_initializer.setCategory(tableInitializer.getCategory());
+                table_initializer.setPerishable(tableInitializer.getPerishable());
+                table_initializer.setCost(tableInitializer.getCost());
+                table_initializer.setStock(tableInitializer.getStock());
+                table_initializer.setSell_price(tableInitializer.getSell_price());
+                session.save(table_initializer);
+            }else{
+                origin.setId(tableInitializer.getId());
+                origin.setName(tableInitializer.getName());
+                origin.setCategory(tableInitializer.getCategory());
+                origin.setPerishable(tableInitializer.getPerishable());
+                origin.setCost(tableInitializer.getCost());
+                origin.setStock(tableInitializer.getStock());
+                origin.setSell_price(tableInitializer.getSell_price());
+                session.update(origin);
+            }
             session.getTransaction().commit();
         }catch (HibernateException e) {
             session.getTransaction().rollback();

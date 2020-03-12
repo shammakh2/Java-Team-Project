@@ -40,8 +40,14 @@ public class Purchase implements TransactionFramework {
 
     @Override
     public void queue(int item, int remove){
+        Session session = sessionF.openSession();
+        Table_Initializer stock = session.get(Table_Initializer.class, item);
+        int remaining = stock.getStock();
             for (ArrayList<Integer> x : itemQ) {
                 if (item == x.get(0)) {
+                    if(remaining < (x.get(1)+remove)){
+                        System.out.println("You dont have enough quantity of the entered item");
+                    }
                     x.add(1, x.get(1) + remove);
                     return;
                 }
