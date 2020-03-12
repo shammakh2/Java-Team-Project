@@ -77,9 +77,8 @@ public class ui {
                             }
                         }
                         int receipt = purch.handshake();
-                        PrintReceipt.pullUpItems(receipt);
+                        PrintReceipt.pullUpItems(choice, receipt);
                         System.out.println("Transaction complete");
-                        break;
                     } catch (Exception e) {
                         System.out.println("Invalid entry please try again.");
                     }
@@ -87,7 +86,7 @@ public class ui {
                 case "exchange - return":
                     try {
                         Exchange e = new Exchange();
-
+                        e.validate = false;
                         while (true) {
                             System.out.println("Please enter the id of the items you want to return or to return multiple items," +
                                     " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
@@ -102,9 +101,7 @@ public class ui {
                                 e.queue(Integer.parseInt(l.split(",")[0]));
                             }
                         }
-                        e.handshake();
-                        System.out.println("Transaction complete");
-                        break;
+                        PrintReceipt.pullUpItems(choice, e.handshake());
                     } catch (Exception e) {
                         System.out.println("Invalid entry please try again.");
                     }
@@ -119,6 +116,7 @@ public class ui {
                         Exchanges reEx = t.getExchange();
                         double cost = t.getTotalCost();
                         Exchange re = new Exchange();
+                        re.validate = true;
                         while (true) {
                             System.out.println("Please enter the id of the items you want to purchase using your return transaction or to enter multiple items," +
                                     " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
@@ -133,9 +131,9 @@ public class ui {
                                 re.queue(Integer.parseInt(l.split(",")[0]));
                             }
                         }
-                        re.exchangePurchase(reEx, session, cost);
-                        System.out.println("Transaction complete");
-                        break;
+                        int receipt = re.exchangePurchase(reEx, session, cost);
+                        PrintReceipt.pullUpItems(choice, receipt, id);
+                        System.out.println("Exchange complete");
                     } catch (Exception e) {
                         System.out.println("Invalid entry please try again.");
                     }
@@ -157,9 +155,9 @@ public class ui {
                                 r.queue(Integer.parseInt(l.split(",")[0]));
                             }
                         }
-                        r.handshake();
-                        System.out.println("Transaction complete");
-                        break;
+                        int receipt = r.handshake();
+                        PrintReceipt.pullUpItems(choice, receipt);
+                        System.out.println("Refund complete");
                     }catch (Exception e){
                         System.out.println("Invalid entry please try again.");
                     }

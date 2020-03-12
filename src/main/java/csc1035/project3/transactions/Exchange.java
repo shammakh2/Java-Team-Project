@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 public class Exchange implements TransactionFramework {
 
+    public boolean validate;
+
     private static SessionFactory sessionF = HibernateUtil.getSessionFactory();
 
     /**
@@ -36,9 +38,24 @@ public class Exchange implements TransactionFramework {
      */
     @Override
     public void queue(int item, int amount) {
+        Session session = sessionF.openSession();
+        Table_Initializer stock = session.get(Table_Initializer.class, item);
+        int remaining = stock.getStock();
         for (ArrayList<Integer> x : itemQ) {
             if (item == x.get(0)) {
+                if (validate){
+                    if(remaining < (x.get(1)+amount)){
+                        System.out.println("You dont have enough quantity of the entered item");
+                        return;
+                    }
+                }
                 x.add(1, x.get(1) + amount);
+                return;
+            }
+        }
+        if (validate){
+            if(remaining < (amount)){
+                System.out.println("You dont have enough quantity of the entered item");
                 return;
             }
         }
@@ -47,6 +64,7 @@ public class Exchange implements TransactionFramework {
         unitItem.add(amount);
         itemQ.add(unitItem);
     }
+
 
     /**
      * Writes all exchanges to database
@@ -90,7 +108,7 @@ public class Exchange implements TransactionFramework {
         return transaction.getId();
     }
 
-    public double exchangePurchase(Exchanges ex, Session s, double price){
+    public int exchangePurchase(Exchanges ex, Session s, double price){
         s.beginTransaction();
         Transactions rePurch = new Transactions();
         rePurch.setType("Exchange-Purchase");
@@ -119,7 +137,7 @@ public class Exchange implements TransactionFramework {
         s.update(ex);
         s.getTransaction().commit();
         s.close();
-        return sum;
+        return rePurch.getId();
     }
 
 }

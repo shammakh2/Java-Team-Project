@@ -11,6 +11,7 @@ import org.hibernate.type.IntegerType;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hibernate.type.StandardBasicTypes.INTEGER;
@@ -24,17 +25,18 @@ public class PrintReceipt {
         // Test Running
         //ReceiptToFile();
         //tempShoppingList();
-        pullUpItems(5);
+        pullUpItems( "purchase", 5, 6);
 
     }
-    public static void pullUpItems(int id){
+
+    public static void pullUpItems(String type, int...id){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Query query = session.createQuery("FROM transaction_stock AS t WHERE t.transaction = :id");
-        List<RelationTransaction> rt = (List<RelationTransaction>) query.setParameter("id", id, INTEGER).list();
+        List<RelationTransaction> rt = (List<RelationTransaction>) query.setParameter("id", id[0], INTEGER).list();
         for (RelationTransaction x: rt){
             insertItems(x.getStock().getId(), x.getStock().getName(), x.getQuantity(), x.getStock().getSell_price());
         }
-        NewAsciiTableReceipt(rt.get(0).getTransaction().getTotalPaid());
+        NewAsciiTableReceipt(rt.get(0).getTransaction().getTotalPaid(), type, id);
     }
 
     public static void insertItems(int id, String name, int quantity, float price) {
@@ -52,7 +54,7 @@ public class PrintReceipt {
         asciiForReceipt.add(tempList);
     }
 
-    public static void NewAsciiTableReceipt(float paid) {
+    public static void NewAsciiTableReceipt(float paid, String type, int...id) {
         // Possibly take a collection which will contain the Item ID, price, quantity.
         border = new StringBuilder();
         resizer(asciiForReceipt);
@@ -60,9 +62,29 @@ public class PrintReceipt {
         for (int i = 0; i < size; i++) {
             border.append("-");
         }
-
         // Testing variables
         float finalTotal = 0.00f;
+
+        switch (type){
+            case "purchase":
+                System.out.format("Purchase transaction receipt\n");
+                System.out.format("Transaction ID: %d\n", id[0]);
+                break;
+            case "exchange - return":
+                System.out.format("Exchange transaction receipt\n");
+                System.out.format("---------EXCHANGE PENDING---------\n");
+                System.out.format("Transaction ID: %d\n", id[0]);
+                break;
+            case "exchange - repurchase":
+                System.out.format("Exchange transaction receipt\n");
+                System.out.format("---------EXCHANGE COMPLETE---------\n");
+                System.out.format("Transaction ID: %d-%d\n", id[1],id[0]);
+                break;
+            case "refund":
+                System.out.format("Refund transaction receipt\n");
+                System.out.format("Transaction ID: %d\n", id[0]);
+                break;
+        }
 
         System.out.format("+-----------------+-%11s-+---------+----------+----------+%n", border.toString());
         System.out.format("|     Product     | %-" + size + "s |  Price  | Quantity |   Total  |%n", "Product Name");
@@ -73,12 +95,25 @@ public class PrintReceipt {
             System.out.format(leftAlignFormat, data.getProductID(), data.getProductName(), data.getPrice(), data.getQuantity(), data.getTotalPrice());
             finalTotal += data.getTotalPrice();
         }
-
-        // for every item in array/collection produce a quantity * price and add to total.
         System.out.format("+-----------------+-%11s-+---------+----------+----------+%n", border.toString());
-        System.out.format("The final total to be paid: £%.2f%n", finalTotal);
-        System.out.format("The final total that was paid: £%.2f%n", paid);
-        System.out.format("Change returned to customer: £%.2f%n", paid - finalTotal);
+        switch (type){
+            case "purchase":
+                // for every item in array/collection produce a quantity * price and add to total.
+                System.out.format("The final total to be paid: £%.2f%n", finalTotal);
+                System.out.format("The final total that was paid: £%.2f%n", paid);
+                System.out.format("Change returned to customer: £%.2f%n", paid - finalTotal);
+                break;
+            case "exchange - return":
+                System.out.format("The amount you have remaining for exchange: £%.2f%n", finalTotal);
+                System.out.format("---------EXCHANGE PENDING---------\n");
+                break;
+            case "exchange - repurchase":
+                System.out.format("---------EXCHANGE COMPLETE---------\n");
+                break;
+            case "refund":
+                System.out.format("The final total returned: £%.2f%n", finalTotal);
+                break;
+        }
 
         asciiForReceipt.clear();
 
