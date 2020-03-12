@@ -83,6 +83,7 @@ public class ui {
                     } catch (Exception e) {
                         System.out.println("Invalid entry please try again.");
                     }
+                    break;
                 case "exchange - return":
                     try {
                         Exchange e = new Exchange();
@@ -107,6 +108,7 @@ public class ui {
                     } catch (Exception e) {
                         System.out.println("Invalid entry please try again.");
                     }
+                    break;
                 case "exchange - repurchase":
                     try {
                         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -137,6 +139,7 @@ public class ui {
                     } catch (Exception e) {
                         System.out.println("Invalid entry please try again.");
                     }
+                    break;
                 case "refund":
                     try {
                         Refund r = new Refund();
@@ -160,6 +163,7 @@ public class ui {
                     }catch (Exception e){
                         System.out.println("Invalid entry please try again.");
                     }
+                    break;
                 case "exit":
                     running = false;
                     warning_quantity.warning();
