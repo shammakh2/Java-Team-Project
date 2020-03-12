@@ -13,14 +13,13 @@
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
         <property name="hbm2ddl.auto">create</property>
-        <mapping class="csc1035.project3.insert.Table_Initializer" /><!--- Mapping to csc1035.project3.insert.Shop_Stock  -->
-        <mapping class="csc1035.project3.warning.warning_quantity" /><!--- Mapping to csc1035.project3.warning.warning_quantity -->
+        <mapping class="csc1035.project3.tables.Table_Initializer" /><!--- Mapping to csc1035.project3.insert.Shop_Stock  -->
+        <mapping class="csc1035.project3.tables.warning_quantity" /><!--- Mapping to csc1035.project3.tables.warning_quantity -->
         <mapping class="csc1035.project3.update.update" /><!--- Mapping to csc1035.project3.update.update -->
-        <mapping class="csc1035.project3.transactions.table.Transactions" /> <!--- Add a new mapping class for a new table in the database -->
-        <mapping class="csc1035.project3.stock.table.Stocks" />
-        <mapping class="csc1035.project3.table.RelationTransaction" />
-        <mapping class="csc1035.project3.transactions.table.Exchanges" />
-        <mapping class="csc1035.project3.table.RelationExchange" />
+        <mapping class="csc1035.project3.tables.Transactions" /> <!--- Add a new mapping class for a new table in the database -->
+        <mapping class="csc1035.project3.tables.transrelational.RelationTransaction" />
+        <mapping class="csc1035.project3.tables.Exchanges" />
+        <mapping class="csc1035.project3.tables.transrelational.RelationExchange" />
 
     </session-factory>
 </hibernate-configuration>
