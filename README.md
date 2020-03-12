@@ -1,6 +1,6 @@
 ## EPOS System - CSC1035 - Assessment 3
 
-Run ui.java for a text based ui, type help to view commands
+Run main.java to run program
 
 In the ui.java file, there are different functions. 
 
