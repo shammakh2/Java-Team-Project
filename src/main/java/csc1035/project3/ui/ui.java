@@ -44,9 +44,6 @@ public class ui {
                     System.out.println("Invalid Choice, please try again");
                 }
             }
-            /*
-             * Please add your functions below.
-             */
 
             switch (choice) {
                 case "lookup":
