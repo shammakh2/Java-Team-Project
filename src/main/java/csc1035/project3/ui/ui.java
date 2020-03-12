@@ -41,9 +41,6 @@ public class ui {
                     System.out.println("Invalid Choice, please try again");
                 }
             }
-            /*
-             * Please add your functions below.
-             */
 
             switch (choice) {
                 case "lookup":
@@ -91,7 +88,7 @@ public class ui {
                         Exchange e = new Exchange();
 
                         while (true) {
-                            System.out.println("Please enter the id of the items you want to purchase or for multiple items," +
+                            System.out.println("Please enter the id of the items you want to return or to return multiple items," +
                                     " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
                                     " done entering all items, type in 'done'");
                             String l = scanner.nextLine();
@@ -121,7 +118,7 @@ public class ui {
                         double cost = t.getTotalCost();
                         Exchange re = new Exchange();
                         while (true) {
-                            System.out.println("Please enter the id of the items you want to purchase or for multiple items," +
+                            System.out.println("Please enter the id of the items you want to purchase using your return transaction or to enter multiple items," +
                                     " enter the item id and the amount separated by a comma (item_id,amount). When you are" +
                                     " done entering all items, type in 'done'");
                             String l = scanner.nextLine();
