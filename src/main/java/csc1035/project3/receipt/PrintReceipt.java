@@ -2,6 +2,8 @@ package csc1035.project3.receipt;
 
 
 import csc1035.project3.HibernateUtil;
+import csc1035.project3.tables.Transactions;
+import csc1035.project3.tables.transrelational.RelationExchange;
 import csc1035.project3.tables.transrelational.RelationTransaction;
 import org.hibernate.Session;
 
@@ -21,16 +23,30 @@ public class PrintReceipt {
     private static StringBuilder border = new StringBuilder();
     private static ArrayList<ShoppingList> asciiForReceipt = new ArrayList<>();
 
-    public static void main(String[] args) throws IOException {
-        // Test Running
-        //ReceiptToFile();
-        //tempShoppingList();
-        pullUpItems( "purchase", 5, 6);
-
-    }
 
     public static void pullUpItems(String type, int...id){
         Session session = HibernateUtil.getSessionFactory().openSession();
+        if (type.equalsIgnoreCase("exchange - return") ){
+            Transactions t = session.get(Transactions.class, id[0]);
+            Query query = session.createQuery("FROM transaction_exchange AS t WHERE t.exchanges = :id");
+            List<RelationExchange> rt = (List<RelationExchange>) query.setParameter("id", t.getExchange().getId(), INTEGER).list();
+            for (RelationExchange x: rt){
+                insertItems(x.getStock().getId(), x.getStock().getName(), x.getQuantity(), x.getStock().getSell_price());
+            }
+            NewAsciiTableReceipt(Float.parseFloat("" + t.getTotalCost()), type, id);
+            return;
+        }
+        if (type.equalsIgnoreCase("exchange - repurchase") ){
+            Transactions t = session.get(Transactions.class, id[1]);
+            Query query = session.createQuery("FROM transaction_stock AS t WHERE t.transaction = :id");
+            List<RelationTransaction> rt = (List<RelationTransaction>) query.setParameter("id", id[0], INTEGER).list();
+            for (RelationTransaction x: rt){
+                insertItems(x.getStock().getId(), x.getStock().getName(), x.getQuantity(), x.getStock().getSell_price());
+            }
+            System.out.println(t.getTotalCost());
+            NewAsciiTableReceipt(Float.parseFloat("" + t.getTotalCost()), type, id);
+            return;
+        }
         Query query = session.createQuery("FROM transaction_stock AS t WHERE t.transaction = :id");
         List<RelationTransaction> rt = (List<RelationTransaction>) query.setParameter("id", id[0], INTEGER).list();
         for (RelationTransaction x: rt){
@@ -41,16 +57,6 @@ public class PrintReceipt {
 
     public static void insertItems(int id, String name, int quantity, float price) {
         ShoppingList tempList = new ShoppingList(id, name, quantity, price);
-        asciiForReceipt.add(tempList);
-    }
-
-    public static void tempShoppingList() {
-        // This simulates the data I obtain from the shopping basket/ transaction.
-        int fakeID = 244351324;
-        int fakeQuantity = 7;
-        String fakeName = "Shammmmmmmmmmmmmmmmakhhhhhhhhhh";
-        float fakePrice = 5.40f;
-        ShoppingList tempList = new ShoppingList(fakeID, fakeName, fakeQuantity, fakePrice);
         asciiForReceipt.add(tempList);
     }
 
@@ -108,6 +114,12 @@ public class PrintReceipt {
                 System.out.format("---------EXCHANGE PENDING---------\n");
                 break;
             case "exchange - repurchase":
+                float test = finalTotal - paid;
+                if (test >= 0) {
+                    System.out.format("Amount to be paid: £%.2f%n", test);
+                }else{
+                    System.out.format("You still have £%.2f left to make your purchase\n", (paid - finalTotal));
+                }
                 System.out.format("---------EXCHANGE COMPLETE---------\n");
                 break;
             case "refund":

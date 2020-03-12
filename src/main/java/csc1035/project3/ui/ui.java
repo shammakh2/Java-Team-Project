@@ -101,7 +101,9 @@ public class ui {
                                 e.queue(Integer.parseInt(l.split(",")[0]));
                             }
                         }
-                        PrintReceipt.pullUpItems(choice, e.handshake());
+                        int i =  e.handshake();
+                        PrintReceipt.pullUpItems(choice, i);
+
                     } catch (Exception e) {
                         System.out.println("Invalid entry please try again.");
                     }
