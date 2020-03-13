@@ -74,10 +74,8 @@ public class Exchange implements TransactionFramework {
         Session session = sessionF.openSession();
         session.beginTransaction();
         Transactions transaction = new Transactions();
-        transaction.setId(2);
         transaction.setType("Exchange-Refund");
         Exchanges exchange = new Exchanges();
-        exchange.setId(2);
         exchange.setTransaction(transaction);
         transaction.setExchange(exchange);
         session.save(transaction);
