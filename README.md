@@ -22,8 +22,10 @@ database.
 
 The command ```exchange - return``` lets the user return product bought.
 
-The  command ```exchange - repurchase``` lets the user return product bought and buy 
-new products.
+The  command ```exchange - repurchase``` lets user buy new products from the credits after returning products
+through the ```exchange - return``` command and entering the ID that ```exchange - return``` prints.
+
+***Note:** Please make sure the transaction Id you enter is from the ```exchange - return``` transaction receipt.*
 
 The command ```refund``` refunds the products the user has returned.
 
