@@ -7,7 +7,7 @@ public class ShoppingList {
     private float price;
     private float totalPrice;
 
-    public ShoppingList(int productID, String productName, int quantity, float price){
+    public ShoppingList(int productID, String productName, int quantity, float price) {
         this.productID = productID;
         this.productName = productName;
         this.quantity = quantity;
@@ -15,19 +15,23 @@ public class ShoppingList {
         this.totalPrice = price * quantity;
     }
 
-    public int getProductID(){
+    public int getProductID() {
         return productID;
     }
-    public String getProductName(){
+
+    public String getProductName() {
         return productName;
     }
-    public int getQuantity(){
+
+    public int getQuantity() {
         return quantity;
     }
-    public float getPrice(){
+
+    public float getPrice() {
         return price;
     }
-    public float getTotalPrice(){
+
+    public float getTotalPrice() {
         return totalPrice;
     }
 }

@@ -6,7 +6,7 @@ import csc1035.project3.lookup.stockLookup;
 import csc1035.project3.receipt.PrintReceipt;
 import csc1035.project3.tables.Exchanges;
 import csc1035.project3.tables.Transactions;
-import csc1035.project3.tables.warning_quantity;
+import csc1035.project3.warning.warning_quantity;
 import csc1035.project3.transactions.Exchange;
 import csc1035.project3.transactions.Purchase;
 import csc1035.project3.transactions.Refund;
@@ -101,7 +101,7 @@ public class ui {
                                 e.queue(Integer.parseInt(l.split(",")[0]));
                             }
                         }
-                        int i =  e.handshake();
+                        int i = e.handshake();
                         PrintReceipt.pullUpItems(choice, i);
 
                     } catch (Exception e) {
@@ -160,7 +160,7 @@ public class ui {
                         int receipt = r.handshake();
                         PrintReceipt.pullUpItems(choice, receipt);
                         System.out.println("Refund complete");
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         System.out.println("Invalid entry please try again.");
                     }
                     break;

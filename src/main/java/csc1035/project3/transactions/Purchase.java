@@ -7,11 +7,13 @@ import org.hibernate.Session;
 import csc1035.project3.tables.Transactions;
 import csc1035.project3.tables.transrelational.RelationTransaction;
 import org.hibernate.SessionFactory;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * Implementation of TransactionFramework that deals with purchases in the EPOS system.
+ *
  * @author Shammakh
  */
 public class Purchase implements TransactionFramework {
@@ -22,56 +24,52 @@ public class Purchase implements TransactionFramework {
     /**
      * 2 dimensional list of items and the amount that needs to be purchased.
      */
-    private ArrayList<ArrayList<Integer>> itemQ = new ArrayList<ArrayList<Integer>>();
+    private ArrayList<ArrayList<Integer>> itemQ = new ArrayList<>();
 
     @Override
-    public void queue(int item){
-        queue(item,1);
+    public void queue(int item) {
+        queue(item, 1);
     }
 
     /**
      * Method that loads up or queues all items to be purchased and their amounts
      * during 'handshake' phase
      *
-     * @param item Id of stock
+     * @param item   Id of stock
      * @param remove Amount to remove from Stocks table
      * @see #handshake()
      */
 
     @Override
-    public void queue(int item, int remove){
+    public void queue(int item, int remove) {
         Session session = sessionF.openSession();
         Table_Initializer stock = session.get(Table_Initializer.class, item);
         int remaining = stock.getStock();
-            for (ArrayList<Integer> x : itemQ) {
-                if (item == x.get(0)) {
-                    if(remaining < (x.get(1)+remove)){
-                        System.out.println("You dont have enough quantity of the entered item");
-                        return;
-                    }
-                    x.add(1, x.get(1) + remove);
+        for (ArrayList<Integer> x : itemQ) {
+            if (item == x.get(0)) {
+                if (remaining < (x.get(1) + remove)) {
+                    System.out.println("You dont have enough quantity of the entered item");
                     return;
                 }
+                x.add(1, x.get(1) + remove);
+                return;
             }
-        if(remaining < (remove)){
+        }
+        if (remaining < (remove)) {
             System.out.println("You dont have enough quantity of the entered item");
             return;
         }
-        ArrayList<Integer> unitItem = new ArrayList<Integer>();
+        ArrayList<Integer> unitItem = new ArrayList<>();
         unitItem.add(item);
         unitItem.add(remove);
-        if(remaining < remove){
-            System.out.println("You dont have enough quantity of the entered item");
-        } else {
-            itemQ.add(unitItem);
-        }
+        itemQ.add(unitItem);
     }
 
     /**
      * Writes all exchanges and changes to database
      */
     @Override
-    public int handshake(){
+    public int handshake() {
         Session session = sessionF.openSession();
         session.beginTransaction();
         Transactions transaction = new Transactions();
@@ -79,20 +77,20 @@ public class Purchase implements TransactionFramework {
         transaction.setType("Purchase");
         session.save(transaction);
         ArrayList<Float> cost = new ArrayList<>();
-        for (ArrayList<Integer> x: itemQ){
+        for (ArrayList<Integer> x : itemQ) {
             RelationTransaction r = new RelationTransaction();
             Table_Initializer currentS = session.get(Table_Initializer.class, x.get(0));
             r.setTransaction(transaction);
             r.setStock(currentS);
             r.setQuantity(x.get(1));
-            cost.add((currentS.getSell_price()*x.get(1)));
+            cost.add((currentS.getSell_price() * x.get(1)));
             currentS.setStock((currentS.getStock() - x.get(1)));
             transaction.getRelation().add(r);
             session.save(r);
             session.update(currentS);
         }
         float sum = 0;
-        for (Float i: cost){
+        for (Float i : cost) {
             sum += i;
         }
         transaction.setTotalCost(sum);
@@ -101,9 +99,9 @@ public class Purchase implements TransactionFramework {
             System.out.println("Amount required: " + sum);
             System.out.println("Amount paid by customer");
             customerPay = scanner.nextFloat();
-            if ((customerPay - sum) >= 0){
+            if ((customerPay - sum) >= 0) {
                 break;
-            }else{
+            } else {
                 System.out.println("Customer has not paid enough for purchase");
             }
         }

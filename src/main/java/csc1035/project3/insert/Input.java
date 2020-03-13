@@ -59,7 +59,7 @@ public class Input {
             userEntry.setStock(stock);
             userEntry.setSell_price(sell_price);
             New_product.create(userEntry);
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Not a valid entry." + "\n" + e.toString());
         }
     }

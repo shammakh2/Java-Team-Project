@@ -16,11 +16,11 @@ public class Refund implements TransactionFramework {
     /**
      * 2 dimensional list of items and the amount that needs to be refunded.
      */
-    private ArrayList<ArrayList<Integer>> itemQ = new ArrayList<ArrayList<Integer>>();
+    private ArrayList<ArrayList<Integer>> itemQ = new ArrayList<>();
 
     @Override
-    public void queue(int item){
-        queue(item,1);
+    public void queue(int item) {
+        queue(item, 1);
     }
 
     /**
@@ -28,18 +28,18 @@ public class Refund implements TransactionFramework {
      * during 'handshake' phase
      *
      * @param item Id of stock
-     * @param add Amount to add to Stocks table
+     * @param add  Amount to add to Stocks table
      * @see #handshake()
      */
     @Override
-    public void queue(int item, int add){
+    public void queue(int item, int add) {
         for (ArrayList<Integer> x : itemQ) {
             if (item == x.get(0)) {
                 x.add(1, x.get(1) + add);
                 return;
             }
         }
-        ArrayList<Integer> unitItem = new ArrayList<Integer>();
+        ArrayList<Integer> unitItem = new ArrayList<>();
         unitItem.add(item);
         unitItem.add(add);
         itemQ.add(unitItem);
@@ -49,7 +49,7 @@ public class Refund implements TransactionFramework {
      * Writes all refunds and changes to database
      */
     @Override
-    public int handshake(){
+    public int handshake() {
         Session session = sessionF.openSession();
         session.beginTransaction();
         Transactions transaction = new Transactions();
@@ -57,20 +57,20 @@ public class Refund implements TransactionFramework {
         transaction.setType("Refund");
         session.save(transaction);
         ArrayList<Float> cost = new ArrayList<>();
-        for (ArrayList<Integer> x: itemQ){
+        for (ArrayList<Integer> x : itemQ) {
             RelationTransaction r = new RelationTransaction();
             Table_Initializer currentS = session.get(Table_Initializer.class, x.get(0));
             r.setTransaction(transaction);
             r.setStock(currentS);
             r.setQuantity(x.get(1));
-            cost.add((currentS.getSell_price()*x.get(1)));
+            cost.add((currentS.getSell_price() * x.get(1)));
             currentS.setStock((currentS.getStock() + x.get(1)));
             transaction.getRelation().add(r);
             session.save(r);
             session.update(currentS);
         }
         double sum = 0;
-        for (Float i: cost){
+        for (Float i : cost) {
             sum += i;
         }
         transaction.setTotalCost(sum);

@@ -1,19 +1,13 @@
 package csc1035.project3.receipt;
 
-
 import csc1035.project3.HibernateUtil;
 import csc1035.project3.tables.Transactions;
 import csc1035.project3.tables.transrelational.RelationExchange;
 import csc1035.project3.tables.transrelational.RelationTransaction;
 import org.hibernate.Session;
-
 import org.hibernate.query.Query;
-import org.hibernate.type.IntegerType;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.hibernate.type.StandardBasicTypes.INTEGER;
@@ -23,24 +17,23 @@ public class PrintReceipt {
     private static StringBuilder border = new StringBuilder();
     private static ArrayList<ShoppingList> asciiForReceipt = new ArrayList<>();
 
-
-    public static void pullUpItems(String type, int...id){
+    public static void pullUpItems(String type, int... id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        if (type.equalsIgnoreCase("exchange - return") ){
+        if (type.equalsIgnoreCase("exchange - return")) {
             Transactions t = session.get(Transactions.class, id[0]);
             Query query = session.createQuery("FROM transaction_exchange AS t WHERE t.exchanges = :id");
             List<RelationExchange> rt = (List<RelationExchange>) query.setParameter("id", t.getExchange().getId(), INTEGER).list();
-            for (RelationExchange x: rt){
+            for (RelationExchange x : rt) {
                 insertItems(x.getStock().getId(), x.getStock().getName(), x.getQuantity(), x.getStock().getSell_price());
             }
             NewAsciiTableReceipt(Float.parseFloat("" + t.getTotalCost()), type, id);
             return;
         }
-        if (type.equalsIgnoreCase("exchange - repurchase") ){
+        if (type.equalsIgnoreCase("exchange - repurchase")) {
             Transactions t = session.get(Transactions.class, id[1]);
             Query query = session.createQuery("FROM transaction_stock AS t WHERE t.transaction = :id");
             List<RelationTransaction> rt = (List<RelationTransaction>) query.setParameter("id", id[0], INTEGER).list();
-            for (RelationTransaction x: rt){
+            for (RelationTransaction x : rt) {
                 insertItems(x.getStock().getId(), x.getStock().getName(), x.getQuantity(), x.getStock().getSell_price());
             }
             System.out.println(t.getTotalCost());
@@ -49,7 +42,7 @@ public class PrintReceipt {
         }
         Query query = session.createQuery("FROM transaction_stock AS t WHERE t.transaction = :id");
         List<RelationTransaction> rt = (List<RelationTransaction>) query.setParameter("id", id[0], INTEGER).list();
-        for (RelationTransaction x: rt){
+        for (RelationTransaction x : rt) {
             insertItems(x.getStock().getId(), x.getStock().getName(), x.getQuantity(), x.getStock().getSell_price());
         }
         NewAsciiTableReceipt(rt.get(0).getTransaction().getTotalPaid(), type, id);
@@ -60,7 +53,7 @@ public class PrintReceipt {
         asciiForReceipt.add(tempList);
     }
 
-    public static void NewAsciiTableReceipt(float paid, String type, int...id) {
+    public static void NewAsciiTableReceipt(float paid, String type, int... id) {
         // Possibly take a collection which will contain the Item ID, price, quantity.
         border = new StringBuilder();
         resizer(asciiForReceipt);
@@ -71,7 +64,7 @@ public class PrintReceipt {
         // Testing variables
         float finalTotal = 0.00f;
 
-        switch (type){
+        switch (type) {
             case "purchase":
                 System.out.format("Purchase transaction receipt\n");
                 System.out.format("Transaction ID: %d\n", id[0]);
@@ -84,7 +77,7 @@ public class PrintReceipt {
             case "exchange - repurchase":
                 System.out.format("Exchange transaction receipt\n");
                 System.out.format("---------EXCHANGE COMPLETE---------\n");
-                System.out.format("Transaction ID: %d-%d\n", id[1],id[0]);
+                System.out.format("Transaction ID: %d-%d\n", id[1], id[0]);
                 break;
             case "refund":
                 System.out.format("Refund transaction receipt\n");
@@ -102,7 +95,7 @@ public class PrintReceipt {
             finalTotal += data.getTotalPrice();
         }
         System.out.format("+-----------------+-%11s-+---------+----------+----------+%n", border.toString());
-        switch (type){
+        switch (type) {
             case "purchase":
                 // for every item in array/collection produce a quantity * price and add to total.
                 System.out.format("The final total to be paid: £%.2f%n", finalTotal);
@@ -117,7 +110,7 @@ public class PrintReceipt {
                 float test = finalTotal - paid;
                 if (test >= 0) {
                     System.out.format("Amount to be paid: £%.2f%n", test);
-                }else{
+                } else {
                     System.out.format("You still have £%.2f left to make your purchase\n", (paid - finalTotal));
                 }
                 System.out.format("---------EXCHANGE COMPLETE---------\n");
@@ -130,21 +123,6 @@ public class PrintReceipt {
         asciiForReceipt.clear();
 
 
-    }
-
-    public static void ReceiptToFile() throws IOException {
-        // Write the purchase receipt to a file rather than to console
-
-        FileWriter receiptPrint = new FileWriter("Receipts.txt", true);
-        receiptPrint.append(String.format("%n"));
-        receiptPrint.append("New Receipt:");
-        receiptPrint.append(String.format("%n"));
-        receiptPrint.append(String.format("+-----------------+-%11s-+---------+----------+----------+%n", border.toString()));
-        receiptPrint.append(String.format("|     Product     | %-" + size + "s |  Price  | Quantity |   Total  |%n", "Product Name"));
-        receiptPrint.append(String.format("+-----------------+-%11s-+---------+----------+----------+%n", border.toString()));
-        //Append each product
-        receiptPrint.flush();
-        receiptPrint.close();
     }
 
     public static void resizer(ArrayList<ShoppingList> asciiForReceipt) {

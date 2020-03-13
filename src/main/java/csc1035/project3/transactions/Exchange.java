@@ -21,19 +21,19 @@ public class Exchange implements TransactionFramework {
     /**
      * 2 dimensional list of items and the amount that needs to be exchanged.
      */
-    private ArrayList<ArrayList<Integer>> itemQ = new ArrayList<ArrayList<Integer>>();
+    private ArrayList<ArrayList<Integer>> itemQ = new ArrayList<>();
 
     @Override
-    public void queue(int item){
-        queue(item,1);
+    public void queue(int item) {
+        queue(item, 1);
     }
 
     /**
      * Method that loads up or queues all items to be exchanged and their amounts
      * during 'handshake' phase
      *
-     * @param item Id of stock
-     * @param amount  Amount to add to Stocks table
+     * @param item   Id of stock
+     * @param amount Amount to add to Stocks table
      * @see #handshake()
      */
     @Override
@@ -43,8 +43,8 @@ public class Exchange implements TransactionFramework {
         int remaining = stock.getStock();
         for (ArrayList<Integer> x : itemQ) {
             if (item == x.get(0)) {
-                if (validate){
-                    if(remaining < (x.get(1)+amount)){
+                if (validate) {
+                    if (remaining < (x.get(1) + amount)) {
                         System.out.println("You dont have enough quantity of the entered item");
                         return;
                     }
@@ -53,13 +53,13 @@ public class Exchange implements TransactionFramework {
                 return;
             }
         }
-        if (validate){
-            if(remaining < (amount)){
+        if (validate) {
+            if (remaining < (amount)) {
                 System.out.println("You dont have enough quantity of the entered item");
                 return;
             }
         }
-        ArrayList<Integer> unitItem = new ArrayList<Integer>();
+        ArrayList<Integer> unitItem = new ArrayList<>();
         unitItem.add(item);
         unitItem.add(amount);
         itemQ.add(unitItem);
@@ -106,27 +106,27 @@ public class Exchange implements TransactionFramework {
         return transaction.getId();
     }
 
-    public int exchangePurchase(Exchanges ex, Session s, double price){
+    public int exchangePurchase(Exchanges ex, Session s, double price) {
         s.beginTransaction();
         Transactions rePurch = new Transactions();
         rePurch.setType("Exchange-Purchase");
         rePurch.setExchange(ex);
         s.save(rePurch);
         ArrayList<Float> cost = new ArrayList<>();
-        for (ArrayList<Integer> x: itemQ){
+        for (ArrayList<Integer> x : itemQ) {
             RelationTransaction r = new RelationTransaction();
             Table_Initializer currentS = s.get(Table_Initializer.class, x.get(0));
             r.setTransaction(rePurch);
             r.setStock(currentS);
             r.setQuantity(x.get(1));
-            cost.add((currentS.getSell_price()*x.get(1)));
+            cost.add((currentS.getSell_price() * x.get(1)));
             currentS.setStock((currentS.getStock() - x.get(1)));
             rePurch.getRelation().add(r);
             s.save(r);
             s.update(currentS);
         }
         double sum = 0;
-        for (Float i: cost){
+        for (Float i : cost) {
             sum += i;
         }
         rePurch.setTotalCost(sum);
